@@ -38,7 +38,7 @@ public class ShopAdminController {
         return "ShopAdmin/AddProduct";
     }
 
-    @GetMapping("/addproductcategoty")
+    @GetMapping("/addproductcategory")
     public String addProductCategory(){
         return "ShopAdmin/AddProductCategory";
     }

@@ -122,56 +122,57 @@
         </script>
 
         <ul class="nav nav-list">
-            <li id="index1" class="active" th:class="${activeUri == 'index' ? 'active':''}">
+            <li class="active"
+                th:class="${activeUri == 'index' ? 'active':''}">
                 <a th:href="@{/shopAdmin}">
                     <i class="icon-home home-icon"></i>
                     <span class="menu-text"> 首页 </span>
                 </a>
             </li>
 
-            <li id="index2" th:class="${activeUri == 'shopList' ? 'active':''}">
+            <li th:class="${activeUri == 'shopList' ? 'active':''}">
                 <a th:href="@{/shopAdmin/shoplist}">
                     <i class="icon-list"></i>
-                    <span class="menu-text"> 商铺列表 </span>
+                    <span class="menu-text"> 店铺列表 </span>
                 </a>
             </li>
 
-            <li id="index3" th:class="${activeUri == 'productList' ? 'active':''}">
+            <li th:class="${activeUri == 'productList' ? 'active':''}">
                 <a th:href="@{/shopAdmin/productlist}">
                     <i class="icon-list-alt"></i>
                     <span class="menu-text"> 商品列表 </span>
                 </a>
             </li>
 
-            <li id="index4" th:class="${activeUri == 'productCategoryList' ? 'active':''}">
+            <li th:class="${activeUri == 'productCategoryList' ? 'active':''}">
                 <a th:href="@{/shopAdmin/productcategory}">
                     <i class="icon-th-list"></i>
                     <span class="menu-text"> 商品类别列表 </span>
                 </a>
             </li>
 
-            <li id="nav_edit" th:class="${nav=='edit'? 'active':''}">
+            <li id="nav_edit" th:class="${nav=='edit'?'active open':''}">
                 <a href="#" class="dropdown-toggle">
                     <i class="icon-edit"></i>
                     <span class="menu-text"> 操作 </span>
-
                     <b class="arrow icon-angle-down"></b>
                 </a>
                 <ul class="submenu">
-                    <li id="index5" th:class="${activeUri == 'addShop' ? 'active':''}">
-                        <a th:href="@{/shopAdmin/addshop}" th:class="${activeUri == 'addShop' ? 'active':''}">
+                    <li th:class="${activeUri == 'addShop'?'active':''}">
+                        <a th:href="@{/shopAdmin/addshop}"
+                           th:class="${activeUri == 'addShop'?'active':''}">
                             <i class="icon-double-angle-right"></i>
                             新增店铺
                         </a>
                     </li>
-                    <li id="index6" th:class="${activeUri == 'addProduct' ? 'active':''}">
-                        <a th:href="@{/shopAdmin/addproduct}" th:class="${activeUri == 'addProduct' ? 'active':''}">
+                    <li th:class="${activeUri == 'addproduct' ? 'active':''}">
+                        <a th:href="@{/shopAdmin/addproduct}" th:class="${activeUri == 'addproduct' ? 'active':''}">
                             <i class="icon-double-angle-right"></i>
                             新增商品
                         </a>
                     </li>
 
-                    <li id="index7" th:class="${activeUri == 'addProductCategory' ? 'active':''}">
+                    <li th:class="${activeUri == 'addProductCategory' ? 'active':''}">
                         <a th:href="@{/shopAdmin/addproductcategory}" th:class="${activeUri == 'addProductCategory' ? 'active':''}">
                             <i class="icon-double-angle-right"></i>
                             新增商品类别
@@ -180,7 +181,7 @@
                 </ul>
             </li>
 
-            <li id="nav_other" th:class="${nav == 'other' ? 'active':''}">
+            <li id="nav_other" th:class="${nav == 'other' ? 'active open':''}">
                 <a href="#" class="dropdown-toggle">
                     <i class="icon-puzzle-piece"></i>
                     <span class="menu-text"> 其他 </span>
