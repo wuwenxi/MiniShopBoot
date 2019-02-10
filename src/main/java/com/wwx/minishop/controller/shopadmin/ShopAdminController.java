@@ -1,4 +1,4 @@
-package com.wwx.minishop.com.wwx.controller.shopadmin;
+package com.wwx.minishop.controller.shopadmin;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
