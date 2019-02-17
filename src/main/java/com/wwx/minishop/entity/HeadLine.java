@@ -1,7 +1,5 @@
 package com.wwx.minishop.entity;
 
-import org.springframework.data.annotation.Id;
-
 import javax.persistence.*;
 import java.util.Date;
 

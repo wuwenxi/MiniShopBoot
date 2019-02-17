@@ -53,4 +53,9 @@ public class ShopAdminController {
         return "ShopAdmin/Feedback";
     }
 
+    @GetMapping("/shopdetail")
+    public String ShopDetail(){
+        return "ShopAdmin/ShopDetail";
+    }
+
 }

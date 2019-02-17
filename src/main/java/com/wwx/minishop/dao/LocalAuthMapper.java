@@ -1,4 +1,7 @@
 package com.wwx.minishop.dao;
 
+import org.apache.ibatis.annotations.Mapper;
+
+@Mapper
 public interface LocalAuthMapper {
 }

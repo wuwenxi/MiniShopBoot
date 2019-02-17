@@ -36,13 +36,47 @@
 
                 <div class="page-content">
                     <div class="page-header">
-                        <h1>
-                            新增商品类别
-                            <small>
-                                <i class="icon-double-angle-right"></i>
-                                查看
-                            </small>
-                        </h1>
+                        <ul class="breadcrumb">
+                            <li><a href="#"><h4>新增商品类别</h4></a></li>
+                            <li class="active">查看</li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <form class="form-horizontal col-md-6 col-md-offset-2" enctype="multipart/form-data">
+
+                            <div class="form-group">
+                                <label for="productCategoryName" class="col-sm-3 control-label">商品类别名称:</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="productCategoryName" placeholder="输入商品类别名称"
+                                           style="max-width: 300px;">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="productCategoryDesc" class="col-sm-3 control-label">商品类别描述:</label>
+                                <div class="col-sm-9">
+                                    <textarea class="form-control" id="productCategoryDesc" placeholder="描述商品类别" rows="3" style="max-width: 300px"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="productFromShop" class="col-sm-3 control-label">所属店铺:</label>
+                                <div class="col-sm-9">
+                                    <div class="col-sm-10">
+                                        <select class="form-group" id="productFromShop">
+                                            <option value="0">—— 店铺 ——</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-offset-8 col-md-10">
+                                    <button type="button" class="btn btn-primary btn-sm" id="submit">提交</button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -55,7 +89,7 @@
     </div>
 
     <script th:src="@{/js/jqurey/jquery-1.11.3.min.js}"></script>
-    <script th:src="@{/js/shopadmin/ShopList.js}"></script>
+    <script th:src="@{/js/shopadmin/addProductCategory.js}"></script>
 
     <script type="text/javascript">
         window.jQuery || document.write("<script src='/assets/js/jquery-2.0.3.min.js'>"+"<"+"script>");

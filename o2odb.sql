@@ -16,50 +16,6 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `tb_area`
---
-
-/*地区*/
-DROP TABLE IF EXISTS `tb_area`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tb_area` (
-  `area_id` int(5) NOT NULL AUTO_INCREMENT,
-  `area_name` varchar(200) NOT NULL,
-  `area_desc` varchar(1000) DEFAULT NULL,
-  `priority` int(2) NOT NULL DEFAULT '0',
-  `create_time` datetime DEFAULT NULL,
-  `last_edit_time` datetime DEFAULT NULL,
-  PRIMARY KEY (`area_id`),
-  UNIQUE KEY `UK_AREA` (`area_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `tb_head_line`
---
-/*头条展示*/
-DROP TABLE IF EXISTS `tb_head_line`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tb_head_line` (
-  `line_id` int(100) NOT NULL AUTO_INCREMENT,
-  `line_name` varchar(1000) DEFAULT NULL,
-  `line_link` varchar(2000) NOT NULL,
-  `line_img` varchar(2000) NOT NULL,
-  `priority` int(2) DEFAULT NULL,
-  `enable_status` int(2) NOT NULL DEFAULT '0',
-  `create_time` datetime DEFAULT NULL,
-  `last_edit_time` datetime DEFAULT NULL,
-  PRIMARY KEY (`line_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tb_head_line`
---
-
---
 -- Table structure for table `tb_local_auth`
 --
 /*本地账户*/
@@ -79,35 +35,6 @@ CREATE TABLE `tb_local_auth` (
   CONSTRAINT `fk_local_profile` FOREIGN KEY (`user_id`) REFERENCES `tb_person_info` (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tb_local_auth`
---
-
---
--- Table structure for table `tb_person_info`
---
-/*用户信息*/
-DROP TABLE IF EXISTS `tb_person_info`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tb_person_info` (
-  `user_id` int(10) NOT NULL AUTO_INCREMENT,
-  `name` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `gender` varchar(2) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `email` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `profile_img` varchar(1024) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `usre_type` int(2) NOT NULL,
-  `create_time` datetime DEFAULT NULL,
-  `last_edit_time` datetime DEFAULT NULL,
-  `enable_status` int(2) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tb_person_info`
---
 
 --
 -- Table structure for table `tb_product`
@@ -138,59 +65,6 @@ CREATE TABLE `tb_product` (
   CONSTRAINT `fk_product_shop` FOREIGN KEY (`shop_id`) REFERENCES `tb_shop` (`shop_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tb_product`
---
-
---
--- Table structure for table `tb_product_category`
---
-
-/*商品类别*/
-DROP TABLE IF EXISTS `tb_product_category`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tb_product_category` (
-  `product_category_id` int(11) NOT NULL AUTO_INCREMENT,
-  `product_category_name` varchar(100) NOT NULL,
-  `priority` int(2) DEFAULT '0',
-  `create_time` datetime DEFAULT NULL,
-  `shop_id` int(20) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`product_category_id`),
-  KEY `fk_procate_shop` (`shop_id`),
-  CONSTRAINT `fk_procate_shop` FOREIGN KEY (`shop_id`) REFERENCES `tb_shop` (`shop_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tb_product_category`
---
-
---
--- Table structure for table `tb_product_img`
---
-
-/*商品图片*/
-DROP TABLE IF EXISTS `tb_product_img`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tb_product_img` (
-  `product_img_id` int(20) NOT NULL AUTO_INCREMENT,
-  `img_address` varchar(2000) NOT NULL,
-  `img_desc` varchar(2000) DEFAULT NULL,
-  `priority` int(2) DEFAULT '0',
-  `create_time` datetime DEFAULT NULL,
-  `product_id` int(20) DEFAULT NULL,
-  PRIMARY KEY (`product_img_id`),
-  KEY `fk_proimg_product` (`product_id`),
-  CONSTRAINT `fk_proimg_product` FOREIGN KEY (`product_id`) REFERENCES `tb_product` (`product_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tb_product_img`
---
 
 --
 -- Table structure for table `tb_shop`
@@ -255,28 +129,6 @@ CREATE TABLE `tb_shop_category` (
 -- Dumping data for table `tb_shop_category`
 --
 
---
--- Table structure for table `tb_wechat_auth`
---
-
-DROP TABLE IF EXISTS `tb_wechat_auth`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tb_wechat_auth` (
-  `wechat_auth_id` int(10) NOT NULL AUTO_INCREMENT,
-  `user_id` int(10) NOT NULL,
-  `open_id` varchar(512) COLLATE utf8_unicode_ci NOT NULL,
-  `create_time` datetime DEFAULT NULL,
-  PRIMARY KEY (`wechat_auth_id`),
-  KEY `fk_oauth_profile` (`user_id`),
-  KEY `uk_oauth` (`open_id`(255)),
-  CONSTRAINT `fk_oauth_profile` FOREIGN KEY (`user_id`) REFERENCES `tb_person_info` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tb_wechat_auth`
---
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

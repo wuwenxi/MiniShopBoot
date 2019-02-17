@@ -31,6 +31,9 @@ spring:
 #控制台显示sql
     show-sql: true
 
+  thymeleaf:
+    cache: false
+
 #配置mybatis相关文件
 mybatis:
   #mybatis全局配置文件

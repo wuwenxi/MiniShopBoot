@@ -14,38 +14,36 @@ public class ShopCategory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer shopCategoryId;
     //类别名称
-    @Column(name = "shop_category_name")
+    @Column
     private String shopCategoryName;
     //详细情况
-    @Column(name = "shop_category_desc")
+    @Column
     private String shopCategoryDesc;
-    //图片地址
-    @Column(name = "shop_category_img")
-    private String shopCategoryImg;
     //权重
     @Column
     private Integer priority;
     //创建时间
-    @Column(name = "create_time")
+    @Column
     private Date createTime;
     //更新时间
-    @Column(name = "last_edit_time")
+    @Column
     private Date lastEditTime;
     /**
      *    父级店铺类别id  ,由于父级店铺类别也是ShopCategory,创建类型为ShopCategory
      */
+    @ManyToOne
+    @JoinColumn(name = "parent_id")
     private ShopCategory parent;
 
     public ShopCategory() {
     }
 
-    public ShopCategory(Integer shopCategoryId, String shopCategoryName, String shopCategoryDesc, String shopCategoryImg,
+    public ShopCategory(Integer shopCategoryId, String shopCategoryName, String shopCategoryDesc,
                         Integer priority, Date createTime, Date lastEditTime,
                         ShopCategory parent) {
         this.shopCategoryId = shopCategoryId;
         this.shopCategoryName = shopCategoryName;
         this.shopCategoryDesc = shopCategoryDesc;
-        this.shopCategoryImg = shopCategoryImg;
         this.priority = priority;
         this.createTime = createTime;
         this.lastEditTime = lastEditTime;
@@ -58,7 +56,6 @@ public class ShopCategory {
                 "shopCategoryId=" + shopCategoryId +
                 ", shopCategoryName='" + shopCategoryName + '\'' +
                 ", shopCategoryDesc='" + shopCategoryDesc + '\'' +
-                ", shopCategoryImg='" + shopCategoryImg + '\'' +
                 ", priority=" + priority +
                 ", createTime=" + createTime +
                 ", lastEditTime=" + lastEditTime +
@@ -88,14 +85,6 @@ public class ShopCategory {
 
     public void setShopCategoryDesc(String shopCategoryDesc) {
         this.shopCategoryDesc = shopCategoryDesc;
-    }
-
-    public String getShopCategoryImg() {
-        return shopCategoryImg;
-    }
-
-    public void setShopCategoryImg(String shopCategoryImg) {
-        this.shopCategoryImg = shopCategoryImg;
     }
 
     public Integer getPriority() {

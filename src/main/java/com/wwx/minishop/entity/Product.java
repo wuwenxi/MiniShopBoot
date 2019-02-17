@@ -1,5 +1,6 @@
 package com.wwx.minishop.entity;
 
+import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
@@ -7,32 +8,48 @@ import java.util.List;
  *      商品信息
  *      多表联查 不使用jpa 采用mybatis进行数据查询
  */
+
+@Entity
+@Table(name = "tb_product")
 public class Product {
     //商品编号
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer productId;
     //商品名
+    @Column
     private String productName;
     //商品详情
+    @Column
     private String productDesc;
     //商品图片地址
+    @Column
     private String imgAddress;
     //原价
+    @Column
     private String normalPrice;
     //折扣价
+    @Column
     private String promotionPrice;
     //权重
+    @Column
     private Integer priority;
     //创建时间
+    @Column
     private Date createTime;
     //更新时间
+    @Column
     private Date lastEditTime;
     //商品状态  可用：下架 ？ 1 ：0
+    @Column
     private Integer enableStatus;
-    // 图片列表
-    private List<ProductImg> productImgList;
     //商品类别
+    @ManyToOne
+    @JoinColumn(name = "product_category_id")
     private ProductCategory productCategory;
     //所属店铺
+    @OneToOne
+    @JoinColumn(name = "shop_id")
     private Shop shop;
 
     public Product() {
@@ -41,7 +58,7 @@ public class Product {
     public Product(Integer productId, String productName, String productDesc,
                    String imgAddress, String normalPrice, String promotionPrice,
                    Integer priority, Date createTime, Date lastEditTime, Integer enableStatus,
-                   List<ProductImg> productImgList, ProductCategory productCategory, Shop shop) {
+                   ProductCategory productCategory, Shop shop) {
         this.productId = productId;
         this.productName = productName;
         this.productDesc = productDesc;
@@ -52,7 +69,6 @@ public class Product {
         this.createTime = createTime;
         this.lastEditTime = lastEditTime;
         this.enableStatus = enableStatus;
-        this.productImgList = productImgList;
         this.productCategory = productCategory;
         this.shop = shop;
     }
@@ -70,7 +86,6 @@ public class Product {
                 ", createTime=" + createTime +
                 ", lastEditTime=" + lastEditTime +
                 ", enableStatus=" + enableStatus +
-                ", productImgList=" + productImgList +
                 ", productCategory=" + productCategory +
                 ", shop=" + shop +
                 '}';
@@ -154,14 +169,6 @@ public class Product {
 
     public void setImgAddress(String imgAddress) {
         this.imgAddress = imgAddress;
-    }
-
-    public List<ProductImg> getProductImgList() {
-        return productImgList;
-    }
-
-    public void setProductImgList(List<ProductImg> productImgList) {
-        this.productImgList = productImgList;
     }
 
     public ProductCategory getProductCategory() {

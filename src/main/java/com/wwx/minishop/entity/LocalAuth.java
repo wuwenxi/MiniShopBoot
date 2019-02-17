@@ -6,18 +6,28 @@ import java.util.Date;
 /**
  *   本地账号
  */
+@Entity
+@Table(name = "tb_local_auth")
 public class LocalAuth {
     //本地账号编号
+    @Id
+    @GeneratedValue
     private Integer localAuthId;
     //关联用户
+    @OneToOne
+    @JoinColumn(name = "user_id")
     private PersonInfo PersonInfo;
     //用户名
+    @Column
     private String userName;
     //用户密码
+    @Column
     private String password;
     //创建时间
+    @Column
     private Date createTime;
     //更新时间
+    @Column
     private Date lastEditTime;
 
     public LocalAuth() {
