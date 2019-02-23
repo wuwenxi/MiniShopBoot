@@ -3,10 +3,6 @@
  *
  * @param img
  */
-/*店铺注册 验证码*/
-function changeVerifyCode(img) {
-    img.src = "../Kaptche?" + Math.floor(Math.random()*100);
-}
 //解析URL中的shopId
 function getQueryString(name) {
     var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");

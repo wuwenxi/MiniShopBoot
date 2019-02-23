@@ -9,4 +9,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  *              ID:实体类中的主键
  * */
 public interface ProductRepository extends JpaRepository<Product,Integer> {
+
+    Product queryProductByProductId(Integer productId);
 }

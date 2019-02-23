@@ -28,6 +28,18 @@
 
     <dependencies>
 
+        <!--引入缓存-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
+        </dependency>
+
+        <!--引入redis-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+
         <!--jdbc-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -51,7 +63,7 @@
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
 
-        <!--操作数据库  mybatis jpa -->
+        <!--操作数据库  mybatis -->
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
@@ -99,6 +111,14 @@
             <groupId>net.coobird</groupId>
             <artifactId>thumbnailator</artifactId>
             <version>0.4.8</version>
+        </dependency>
+
+        <!--mybatis 分页操作-->
+        <!-- https://mvnrepository.com/artifact/com.github.pagehelper/pagehelper -->
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper</artifactId>
+            <version>5.1.4</version>
         </dependency>
    </dependencies>
 

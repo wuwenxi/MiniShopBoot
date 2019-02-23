@@ -1,6 +1,7 @@
 package com.wwx.minishop.entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -8,7 +9,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "tb_shop_category")
-public class ShopCategory {
+public class ShopCategory implements Serializable {
     //类别编号
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -2,14 +2,15 @@ package com.wwx.minishop.entity;
 
 import javax.persistence.*;
 import javax.validation.Valid;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  *   商品详情图
  * */
 @Entity
-@Table(name = "tn_product_img")
-public class  ProductImg {
+@Table(name = "tb_product_img")
+public class  ProductImg implements Serializable {
     //商品图片id
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

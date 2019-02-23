@@ -6,6 +6,10 @@
     <!--顶部栏-->
     <div th:replace="commons/bar::topbar"></div>
 
+    <div th:replace="commons/commons::category"></div>
+
+    <div th:replace="commons/commons::delete"></div>
+
     <div class="main-container" id="main-container">
         <script type="text/javascript">
             try{ace.settings.check('main-container' , 'fixed')}catch(e){}
@@ -37,22 +41,12 @@
                 <div class="page-content">
                     <div class="page-header">
                         <ul class="breadcrumb">
-                            <li><a href="#"><h4>商品类别列表</h4></a></li>
+                            <li><a href="/shopAdmin/productcategory"><h4>商品类别列表</h4></a></li>
                             <li class="active">查看</li>
                         </ul>
                     </div>
 
                     <div class="row">
-                        <div class="form-group col-sm-offset-5">
-                            <label for="selectProduct" class="col-sm-2 control-label">搜索商品类别:</label>
-                            <div class="col-sm-5">
-                                <input type="text" class="form-control" id="selectProduct" placeholder="输入商品类别\店铺名"
-                                       style="max-width: 300px;">
-                            </div>
-                            <div class="col-md-2">
-                                <button type="button" class="btn btn-primary btn-sm" id="select">搜索</button>
-                            </div>
-                        </div>
                         <div class="col-xs-12" style="margin-top: 20px">
                             <table class="table table-hover" id="productCategory">
                                 <thead>
@@ -67,12 +61,12 @@
                                 <tbody></tbody>
                             </table>
                         </div>
-                        <!--底部页栏-->
-                        <div class="row">
-                            <!--底部提示页码栏-->
-                            <div class="col-md-offset-2" style="float:none" id="page_info"></div>
-                            <div class="col-md-offset-6" id="page_nav"></div>
-                        </div>
+                    </div>
+                    <!--底部页栏-->
+                    <div class="row">
+                        <!--底部提示页码栏-->
+                        <div class="col-md-offset-1" style="font-size: 15px" id="page_info"></div>
+                        <div class="col-md-offset-6" id="page_nav"></div>
                     </div>
                 </div>
             </div>
@@ -84,8 +78,8 @@
         </a>
     </div>
 
-    <script th:src="@{/js/jqurey/jquery-1.11.3.min.js}"></script>
-    <script th:src="@{/js/shopadmin/productCategoryList.js}"></script>
+    <script th:src="@{/js/jquery/jquery-1.11.3.min.js}"></script>
+    <script th:src="@{/js/shopadmin/productCategory.js}"></script>
 
     <script type="text/javascript">
         window.jQuery || document.write("<script src='/assets/js/jquery-2.0.3.min.js'>"+"<"+"script>");

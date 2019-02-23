@@ -34,9 +34,26 @@ spring:
   thymeleaf:
     cache: false
 
+#连接redis
+  redis:
+    host: 192.168.0.105
+
+
+
 #配置mybatis相关文件
 mybatis:
   #mybatis全局配置文件
   config-location: classpath:mybatis/mybatis-config.xml
   #mapper文件路径
   mapper-locations: classpath:mybatis/mapper/*.xml
+
+#debug: true
+  #mybatis   开启驼峰命名法
+#  configuration:
+#   map-underscore-to-camel-case: true
+
+#mybatis 操作数据库时  打印日志
+#logging:
+# level: com.wwx.minishop.dao = debug
+
+

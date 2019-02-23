@@ -100,7 +100,8 @@ $(function () {
             success:function (data) {
                 console.log(data);
                 if(data.code===100){
-                    alert("提交失败");
+                    //alert("提交成功");
+                    window.location.href = "/shopAdmin/shoplist"
                 }else {
                     alert(data.extend.map.msg);
                 }

@@ -1,6 +1,7 @@
 package com.wwx.minishop.entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -8,7 +9,7 @@ import java.util.Date;
  * */
 @Entity
 @Table(name = "tb_shop")
-public class Shop {
+public class Shop implements Serializable {
     //店铺id
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -69,6 +70,25 @@ public class Shop {
         this.lastEditTime = lastEditTime;
         this.enableStatus = enableStatus;
         this.advice = advice;
+    }
+
+    @Override
+    public String toString() {
+        return "Shop{" +
+                "shopId=" + shopId +
+                ", owner=" + owner +
+                ", shopCategory=" + shopCategory +
+                ", shopName='" + shopName + '\'' +
+                ", shopDesc='" + shopDesc + '\'' +
+                ", shopAddress='" + shopAddress + '\'' +
+                ", phone='" + phone + '\'' +
+                ", shopImg='" + shopImg + '\'' +
+                ", priority=" + priority +
+                ", createTime=" + createTime +
+                ", lastEditTime=" + lastEditTime +
+                ", enableStatus=" + enableStatus +
+                ", advice='" + advice + '\'' +
+                '}';
     }
 
     public Integer getShopId() {

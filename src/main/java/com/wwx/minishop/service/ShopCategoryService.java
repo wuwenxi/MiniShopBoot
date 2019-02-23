@@ -6,7 +6,9 @@ import java.util.List;
 
 public interface ShopCategoryService {
 
-    List<ShopCategory> getAllShopCategory(ShopCategory shopCategory);
+    List<ShopCategory> findShopCategoryWithParentId(ShopCategory shopCategory);
+
+    ShopCategory findShopCategoryById(Integer shopCategoryId);
 
     int addShopCategory(ShopCategory shopCategory);
 

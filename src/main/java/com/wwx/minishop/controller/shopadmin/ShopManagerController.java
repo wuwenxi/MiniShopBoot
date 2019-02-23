@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.MultipartResolver;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import javax.servlet.http.HttpServletRequest;
@@ -136,7 +135,7 @@ public class ShopManagerController {
         childCategory.setParent(parentCategory);
 
         try {
-            List<ShopCategory> shopCategoryList = shopCategoryService.getAllShopCategory(childCategory);
+            List<ShopCategory> shopCategoryList = shopCategoryService.findShopCategoryWithParentId(childCategory);
             map.put("shopCategoryList",shopCategoryList);
             return Msg.success().add("map",map);
         } catch (Exception e) {
@@ -164,15 +163,18 @@ public class ShopManagerController {
         try {
             Shop shop = new Shop();
             shop.setOwner(personInfo);
-            ShopExecution execution = shopService.getAllShop(shop);
-
-            if(execution.getState().equals(ShopStateEnum.SUCCESS.getState()) ){
-                map.put("shops",execution.getShops());
-                map.put("count",execution.getCount());
-            }else {
-                map.put("msg","当前账户没有开设店铺");
+            if(personInfo.getUserId()!=null && personInfo.getUserId()>0){
+                List<Shop> shopList = shopService.findShopListWithOwner(shop);
+                if(shopList.size()> 0 ){
+                    map.put("shops",shopList);
+                    map.put("count",shopList.size());
+                }else {
+                    map.put("msg","当前账户没有开设店铺");
+                }
+                return Msg.success().add("map",map);
             }
-            return Msg.success().add("map",map);
+            map.put("msg","服务器内部错误");
+            return Msg.fail().add("map",map);
         } catch (Exception e) {
             e.printStackTrace();
             map.put("msg","服务器内部错误");

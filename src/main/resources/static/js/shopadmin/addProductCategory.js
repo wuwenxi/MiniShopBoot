@@ -16,14 +16,21 @@ $(function () {
 
     $("#submit").click(function () {
 
-        var productCatogory={};
+        var productCategory={};
 
-        productCatogory.productCategoryName = $("#productCategoryName").val();
-        productCatogory.shopId = $("#productFromShop option:selected").val();
+        productCategory.productCategoryName = $("#productCategoryName").val();
+        productCategory.shop = {
+            shopId:$("#productFromShop option:selected").val()
+        };
+
+        if(!productCategory.productCategoryName||!productCategory.shop){
+            alert("请填写完整信息");
+            return;
+        }
 
         var formdata = new FormData();
 
-        formdata.append("productCategory",JSON.stringify(productCatogory));
+        formdata.append("productCategory",JSON.stringify(productCategory));
 
         $.ajax({
             url:"/product/addProductCategory",
@@ -33,7 +40,13 @@ $(function () {
             processData:false,
             cache:false,
             success:function (data) {
-                console.log(data);
+                //console.log(data);
+                if(data.code === 100){
+                    alert("提交成功");
+                    window.location.href = "/shopAdmin/productcategory";
+                }else {
+                    alert(data.extend.map.msg)
+                }
             }
         })
     })

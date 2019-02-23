@@ -1,6 +1,7 @@
 package com.wwx.minishop.entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -8,7 +9,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "tb_local_auth")
-public class LocalAuth {
+public class LocalAuth implements Serializable {
     //本地账号编号
     @Id
     @GeneratedValue

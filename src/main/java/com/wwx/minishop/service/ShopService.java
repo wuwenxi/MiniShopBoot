@@ -4,10 +4,12 @@ import com.wwx.minishop.beans.ImageHolder;
 import com.wwx.minishop.entity.Shop;
 import com.wwx.minishop.execution.ShopExecution;
 
+import java.util.List;
+
 
 public interface ShopService {
 
-    ShopExecution getAllShop(Shop shop);
+    List<Shop> findShopListWithOwner(Shop shop);
 
     ShopExecution modifyShop(Shop shop, ImageHolder imageHolder);
 

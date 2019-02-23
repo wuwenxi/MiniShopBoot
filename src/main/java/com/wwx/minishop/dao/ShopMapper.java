@@ -14,4 +14,6 @@ public interface ShopMapper {
     int updateShop(Shop shop);
 
     int insertShop(Shop shop);
+
+    Shop queryShopById(Integer shopId);
 }

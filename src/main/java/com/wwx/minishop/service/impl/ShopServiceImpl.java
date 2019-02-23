@@ -11,6 +11,9 @@ import com.wwx.minishop.service.ShopService;
 import com.wwx.minishop.utils.ImageUtils;
 import com.wwx.minishop.utils.PathUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
@@ -18,6 +21,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import static com.wwx.minishop.utils.InsertImageUtils.addShopImg;
+
+@CacheConfig(cacheManager = "shopCacheManager")
 @Service
 public class ShopServiceImpl implements ShopService {
 
@@ -27,21 +33,18 @@ public class ShopServiceImpl implements ShopService {
     @Autowired
     ShopRepository shopRepository;
 
+    @Cacheable(cacheNames = "shopList",key = "'own'+#shop.owner.userId")
     @Override
-    public ShopExecution getAllShop(Shop shop) {
-        ShopExecution execution = new ShopExecution();
+    public List<Shop> findShopListWithOwner(Shop shop) {
         //从第一行开始查询  店铺总数不允许超过10个
         List<Shop> shopList = shopMapper.selectShopList(shop,0,10);
         if(shopList.size()>0){
-            execution.setShops(shopList);
-            execution.setCount(shopList.size());
-            execution.setState(ShopStateEnum.SUCCESS.getState());
-        }else {
-            execution.setState(ShopStateEnum.NULL_SHOP.getState());
+            return shopList;
         }
-        return execution;
+        return null;
     }
 
+    @CachePut(cacheNames = "shop",key = "'shop'+#shop.shopId")
     @Override
     public ShopExecution modifyShop(Shop shop, ImageHolder image) throws ShopException{
         //获取文件输入流  以及文件名
@@ -79,11 +82,15 @@ public class ShopServiceImpl implements ShopService {
         }
     }
 
+    @Cacheable(cacheNames = "shop",key = "'shop'+#shopId")
     @Override
     public Shop getShopById(Integer shopId) {
-        Optional<Shop> shop = shopRepository.findById(shopId);
-
-        return shop.get();
+        System.out.println("查询"+shopId+"号店铺");
+        Shop shop = shopMapper.queryShopById(shopId);
+        if(shop!=null){
+            return shop;
+        }
+        return null;
     }
 
     @Override
@@ -143,14 +150,5 @@ public class ShopServiceImpl implements ShopService {
             throw new ShopException("addShop ERROR : "+e.getMessage());
         }
 
-    }
-
-    private void addShopImg(Shop shop,ImageHolder image){
-        //获取相对路径  "upload/item/shop/"+ shopId + "/"
-        String path = PathUtils.getShopImagePath(shop.getShopId());
-        //存储图片的绝对路径
-        String realPath = ImageUtils.generateThumbnail(image,path);
-        //将图片地址存入数据库
-        shop.setShopImg(realPath);
     }
 }

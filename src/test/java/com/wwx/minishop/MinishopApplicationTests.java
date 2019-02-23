@@ -1,10 +1,13 @@
 package com.wwx.minishop;
 
 import com.wwx.minishop.beans.ImageHolder;
+import com.wwx.minishop.dao.ProductCategoryMapper;
+import com.wwx.minishop.dao.ProductMapper;
 import com.wwx.minishop.dao.ShopCategoryMapper;
 import com.wwx.minishop.dao.ShopMapper;
 import com.wwx.minishop.entity.*;
 import com.wwx.minishop.enums.ShopStateEnum;
+import com.wwx.minishop.exception.ProductException;
 import com.wwx.minishop.execution.ShopExecution;
 import com.wwx.minishop.repository.*;
 import com.wwx.minishop.service.ProductService;
@@ -12,7 +15,12 @@ import com.wwx.minishop.service.ShopService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.cache.Cache;
+import org.springframework.data.redis.cache.RedisCacheManager;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.File;
@@ -48,6 +56,56 @@ public class MinishopApplicationTests {
 
     @Autowired
     ShopCategoryMapper shopCategoryMapper;
+
+    @Autowired
+    ProductMapper productMapper;
+
+    @Autowired
+    ProductRepository productRepository;
+
+    @Autowired
+    ProductCategoryMapper productCategoryMapper;
+
+    @Autowired
+    StringRedisTemplate stringRedisTemplate;
+
+    @Autowired
+    RedisTemplate redisTemplate;
+
+    @Autowired
+    RedisTemplate<Object,Product> productRedisTemplate;
+
+
+
+    /*@Qualifier("productCacheManager")//指定缓存管理器
+    @Autowired
+    RedisCacheManager productCacheManager;*/
+
+
+    @Test
+    public void testRedis(){
+        //stringRedisTemplate.opsForValue().append("test","test01");
+        /*String test = stringRedisTemplate.opsForValue().get("test");
+        System.out.println("redisTest:"+test);*/
+        Product product = new Product();
+        product.setProductId(1);
+        product.setEnableStatus(0);
+        product.setProductName("test");
+        product.setCreateTime(new Date());
+        product.setLastEditTime(new Date());
+        //productRedisTemplate.opsForValue().set("test1",product);
+        Product product1 = productRedisTemplate.opsForValue().get("test1");
+        System.out.println(product1);
+    }
+
+    @Test
+    public void test01()  {
+        ProductCategory productCategory = new ProductCategory();
+        productCategory.setProductCategoryId(1);
+        productCategory.setProductCategoryName("原味咖啡");
+        int num = productCategoryMapper.updateProductCategory(productCategory);
+        System.out.println();
+    }
 
     @Test
     public void testFileUpload() {
@@ -89,14 +147,15 @@ public class MinishopApplicationTests {
     public void testShopCategory() {
         ShopCategory parent = new ShopCategory();
         parent.setShopCategoryId(8);
-        ShopCategory shopCategory0 = new ShopCategory(null, "干洗店", "干洗店", 100,
+        ShopCategory shopCategory0 = new ShopCategory(null, "日常用品", "日常用品", 0,
                 new Date(), new Date(), parent);
-        ShopCategory shopCategory1 = new ShopCategory(null, "杂货铺", "杂货铺", 100,
+        ShopCategory shopCategory1 = new ShopCategory(null, "洗涤", "洗涤", 0,
                 new Date(), new Date(), parent);
-        ShopCategory shopCategory2 = new ShopCategory(null, "文具店", "文具店", 100,
+        ShopCategory shopCategory2 = new ShopCategory(null, "杂货铺", "杂货铺", 0,
                 new Date(), new Date(), parent);
-        ShopCategory shopCategory3 = new ShopCategory(null, "日常用品", "日常用品", 100,
+        ShopCategory shopCategory3 = new ShopCategory(null, "文具店", "文具店", 0,
                 new Date(), new Date(), parent);
+
 
         List<ShopCategory> shopCategoryArrayList = new ArrayList<>();
         shopCategoryArrayList.add(shopCategory0);
@@ -125,9 +184,9 @@ public class MinishopApplicationTests {
         PersonInfo info = new PersonInfo();
         info.setUserId(1);
         shop.setOwner(info);
-        ShopExecution execution = shopService.getAllShop(shop);
-        System.out.println("店铺个数: " + execution.getCount());
-        System.out.println(execution.getShops());
+        List<Shop> shopList = shopService.findShopListWithOwner(shop);
+        System.out.println("店铺个数: " + shopList.size());
+        System.out.println(shopList);
     }
 }
 

@@ -1,6 +1,7 @@
 package com.wwx.minishop.entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -8,7 +9,7 @@ import java.util.Date;
  * */
 @Entity
 @Table(name = "tb_product_category")
-public class ProductCategory {
+public class ProductCategory implements Serializable {
     //商品Id
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,19 +24,18 @@ public class ProductCategory {
     @Column(name = "create_time")
     private Date createTime;
     //商铺id
-    @Column(name = "shop_id")
-    private Integer shopId;
+    @ManyToOne
+    @JoinColumn(name = "shop_id")
+    private Shop shop;
 
     public ProductCategory() {
     }
 
-    public ProductCategory(Integer productCategoryId, String productCategoryName,
-                           Integer priority, Date createTime, Integer shopId) {
-        this.productCategoryId = productCategoryId;
+    public ProductCategory(String productCategoryName, Integer priority, Date createTime, Shop shop) {
         this.productCategoryName = productCategoryName;
         this.priority = priority;
         this.createTime = createTime;
-        this.shopId = shopId;
+        this.shop = shop;
     }
 
     @Override
@@ -45,7 +45,7 @@ public class ProductCategory {
                 ", productCategoryName='" + productCategoryName + '\'' +
                 ", priority=" + priority +
                 ", createTime=" + createTime +
-                ", shopId=" + shopId +
+                ", shop=" + shop +
                 '}';
     }
 
@@ -81,11 +81,11 @@ public class ProductCategory {
         this.createTime = createTime;
     }
 
-    public Integer getShopId() {
-        return shopId;
+    public Shop getShop() {
+        return shop;
     }
 
-    public void setShopId(Integer shopId) {
-        this.shopId = shopId;
+    public void setShop(Shop shop) {
+        this.shop = shop;
     }
 }

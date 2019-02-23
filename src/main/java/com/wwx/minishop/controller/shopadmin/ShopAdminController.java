@@ -8,54 +8,61 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/shopAdmin")
 public class ShopAdminController {
 
+    private static final String prefix = "ShopAdmin/";//前缀prefix  后缀 suffix
+
     @GetMapping()
     public String ShopAdminIndex(){
-        return "ShopAdmin/ShopAdmin";
+        return prefix + "ShopAdmin";
     }
 
     @GetMapping("/shoplist")
     public String ShopList(){
-        return "ShopAdmin/ShopList";
+        return prefix + "ShopList";
     }
 
     @GetMapping("/productlist")
     public String ProductList(){
-        return "ShopAdmin/ProductList";
+        return prefix +"ProductList";
     }
 
     @GetMapping("/productcategory")
     public String productCategory(){
-        return "ShopAdmin/ProductCategoryList";
+        return prefix + "ProductCategoryList";
     }
 
     @GetMapping("/addshop")
     public String addShop(){
-        return "ShopAdmin/AddShop";
+        return prefix + "AddShop";
     }
 
     @GetMapping("/addproduct")
     public String addProduct(){
-        return "ShopAdmin/AddProduct";
+        return prefix + "AddProduct";
     }
 
     @GetMapping("/addproductcategory")
     public String addProductCategory(){
-        return "ShopAdmin/AddProductCategory";
+        return prefix + "AddProductCategory";
     }
 
     @GetMapping("/userinfo")
     public String UserInfo(){
-        return "ShopAdmin/UserInfo";
+        return prefix + "UserInfo";
     }
 
     @GetMapping("/feedback")
     public String Feedback(){
-        return "ShopAdmin/Feedback";
+        return prefix + "Feedback";
     }
 
     @GetMapping("/shopdetail")
     public String ShopDetail(){
-        return "ShopAdmin/ShopDetail";
+        return prefix + "ShopDetail";
+    }
+
+    @GetMapping("/modifyProduct")
+    public String modifyProduct(){
+        return prefix + "modifyProduct";
     }
 
 }

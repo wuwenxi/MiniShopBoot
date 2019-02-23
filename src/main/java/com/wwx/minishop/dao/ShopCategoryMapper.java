@@ -12,4 +12,6 @@ public interface ShopCategoryMapper {
     List<ShopCategory> queryForListShopCategory(@Param("shopCategory") ShopCategory shopCategory);
 
     void updateShopCategory(@Param("shopCategory") ShopCategory shopCategory);
+
+    ShopCategory queryShopCategory(Integer shopCategoryId);
 }

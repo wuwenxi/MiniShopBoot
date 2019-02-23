@@ -12,5 +12,5 @@ import java.util.List;
  * */
 public interface ProductCategoryRepository extends JpaRepository<ProductCategory,Integer> {
 
-    List<ProductCategory> queryProductCategoriesByShopId(Integer shopId);
+    int deleteByProductCategoryId(Integer productCategoryId);
 }
