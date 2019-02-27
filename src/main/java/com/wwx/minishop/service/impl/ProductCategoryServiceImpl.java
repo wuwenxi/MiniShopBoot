@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Random;
 
 
-@CacheConfig(cacheManager = "productCategoryCacheManager")
+@CacheConfig(cacheManager = "cacheManager")
 @Service
 public class ProductCategoryServiceImpl implements ProductCategoryService {
 
@@ -30,6 +30,7 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
         return  productCategoryMapper.queryProductCategoriesByShopId(shopId);
     }
 
+    @CacheEvict(cacheNames = "productCategoryList",key ="'productCategory'+#productCategory.shop.shopId" )
     @Override
     public int addProductCategory(ProductCategory productCategory) {
 
@@ -51,8 +52,8 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
                     @CachePut(cacheNames = "productCategory",
                             key = "'productCategory'+#productCategory.productCategoryId")},
             evict = {
-                    //allEntries 清空productCategoryList中的所有缓存
-                    @CacheEvict(cacheNames = "productCategoryList",allEntries = true)}
+                    //allEntries 清空productCategoryList中shopId下的缓存
+                    @CacheEvict(cacheNames = "productCategoryList",key = "'productCategory'+#productCategory.shop.shopId")}
     )
     @Override
     public int modifyProductCategory(ProductCategory productCategory) {

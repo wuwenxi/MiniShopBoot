@@ -11,9 +11,7 @@ import com.wwx.minishop.service.ShopService;
 import com.wwx.minishop.utils.ImageUtils;
 import com.wwx.minishop.utils.PathUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.*;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
@@ -23,7 +21,7 @@ import java.util.Optional;
 
 import static com.wwx.minishop.utils.InsertImageUtils.addShopImg;
 
-@CacheConfig(cacheManager = "shopCacheManager")
+@CacheConfig(cacheManager = "cacheManager")
 @Service
 public class ShopServiceImpl implements ShopService {
 
@@ -33,18 +31,26 @@ public class ShopServiceImpl implements ShopService {
     @Autowired
     ShopRepository shopRepository;
 
-    @Cacheable(cacheNames = "shopList",key = "'own'+#shop.owner.userId")
+    @Cacheable(cacheNames = "shopList",key = "'own'+#shop.owner.userId",unless = "#result==null")
     @Override
     public List<Shop> findShopListWithOwner(Shop shop) {
         //从第一行开始查询  店铺总数不允许超过10个
         List<Shop> shopList = shopMapper.selectShopList(shop,0,10);
+
         if(shopList.size()>0){
             return shopList;
         }
         return null;
     }
 
-    @CachePut(cacheNames = "shop",key = "'shop'+#shop.shopId")
+    @Caching(
+            put = {
+                    @CachePut(cacheNames = "shop",key = "'shop'+#shop.shopId")},
+            evict = {
+                    //数据更新 清空shopList的缓存
+                    @CacheEvict(cacheNames = "shopList",key = "'own'+#shop.owner.userId")
+            }
+    )
     @Override
     public ShopExecution modifyShop(Shop shop, ImageHolder image) throws ShopException{
         //获取文件输入流  以及文件名
@@ -82,7 +88,7 @@ public class ShopServiceImpl implements ShopService {
         }
     }
 
-    @Cacheable(cacheNames = "shop",key = "'shop'+#shopId")
+    @Cacheable(cacheNames = "shop",key = "'shop'+#shopId",unless = "#result==null")
     @Override
     public Shop getShopById(Integer shopId) {
         System.out.println("查询"+shopId+"号店铺");
@@ -93,6 +99,7 @@ public class ShopServiceImpl implements ShopService {
         return null;
     }
 
+    @CacheEvict(cacheNames = "shopList",key = "'own'+#shop.owner.userId")
     @Override
     public ShopExecution addShop(Shop shop, ImageHolder image) {
         if(shop == null){

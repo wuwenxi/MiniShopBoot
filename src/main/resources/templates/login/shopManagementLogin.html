@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>人事管理系统</title>
+    <title>MiniShop商家登录系统</title>
+    <link rel="icon" type="image/ico" th:href="@{/image/favicon.ico}">
     <link th:href="@{/css/boostrap/bootstrap.min.css}"
           rel="stylesheet"/>
     <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
@@ -15,7 +16,7 @@
 
     <div class="container">
         <div class="form row">
-            <form action="/shopManagementLogin" type="post">
+            <form th:action="@{/shopAdminLogin}" th:method="post">
                 <div class="form-horizontal">
                     <h1 class="form-title">MiniShop商家登录系统</h1>
                 </div>
@@ -35,7 +36,7 @@
                             <input type="checkbox" name="remember">记住我
                         </div>
                         <div class="form-group col-md-offset-9">
-                            <button type="submit" class="btn btn-success pull-right" name="submit" id="submit">登录</button>
+                            <input type="submit" class="btn btn-success pull-right" name="submit" id="submit" value="登录">
                         </div>
                     </div>
                 </div>
@@ -43,55 +44,6 @@
         </div>
     </div>
 
-    <script type="text/javascript">
-
-        /*$(document).keyup(function(event){
-            if(event.keyCode === 13){
-                $("#submit").trigger("click");
-            }
-        });
-
-        function checkUserAndPassword(){
-            var user = $("#username").val();
-            var password = $("#password").val();
-            if(user.length === 0){
-                $("#username").parents().addClass("has-error");
-                $("#username").next().text("请输入账号");
-                return false;
-            }
-            if(password.length === 0){
-                $("#password").parents().addClass("has-error");
-                $("#password").next().text("请输入密码");
-                return false;
-            }
-            return true;
-        }
-
-        $("#submit").click(function () {
-            $("#username").parents().removeClass("has-error");
-            $("#username").next().text("");
-            if(!checkUserAndPassword()){
-                return false;
-            }
-
-            var user = $("#username").val();
-            var password = $("#password").val();
-            var check = user + "-" + password;
-            $.ajax({
-                url:"/user/checkLoginUser/"+check,
-                type:"POST",
-                success:function (result) {
-                    if(result.code === 100){
-                        window.location.href='index.jsp';
-                    }else {
-                        $("#modal_hint").text(result.map.msg);
-                        $("#modal").modal({
-                            backdrop:'static'
-                        })
-                    }
-                }
-            });
-        })*/
-    </script>
+    <!--<script type="text/javascript" th:src="@{/js/shopAdminLogin.js}"></script>-->
 </body>
 </html>

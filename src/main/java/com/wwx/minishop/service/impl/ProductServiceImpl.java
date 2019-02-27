@@ -12,9 +12,7 @@ import com.wwx.minishop.service.ProductService;
 import com.wwx.minishop.utils.ImageUtils;
 import com.wwx.minishop.utils.PathUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.*;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -24,7 +22,7 @@ import java.util.List;
 import static com.wwx.minishop.utils.InsertImageUtils.insertProductImg;
 import static com.wwx.minishop.utils.InsertImageUtils.insertProductImgList;
 
-@CacheConfig(cacheManager = "productCacheManager")
+@CacheConfig(cacheManager = "cacheManager")
 @Service
 public class ProductServiceImpl implements ProductService {
 
@@ -37,13 +35,14 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     ProductImgRepository productImgRepository;
 
-    @Cacheable(cacheNames = "productList",key = "'shopId'+#shopId")
+    @Cacheable(cacheNames = "productList",key = "'shopId'+#shopId",unless = "#result==null")
     @Override
     public List<Product> findProductListWithShopId(Integer shopId) {
        // productRedisHelper.getProductListByShopId(shopId);
         return productMapper.queryAllByShopId(shopId);
     }
 
+    @CacheEvict(cacheNames = "productList",key = "'shopId'+#product.shop.shopId")
     @Override
     public int addProduct(Product product, ImageHolder image, List<ImageHolder> productImgList) {
         if(product!=null && product.getShop()!=null && product.getShop().getShopId()!=null){
@@ -81,7 +80,14 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
-    @CachePut(cacheNames = "product",key = "'product'+#product.productId")
+    @Caching(
+            put = {
+                    @CachePut(cacheNames = "product",key = "'product'+#product.productId")},
+            evict = {
+                    //清空更新商品所属店铺下的商品列表
+                    @CacheEvict(cacheNames = "productList",key = "'shopId'+#product.shop.shopId")
+            }
+    )
     @Override
     public int modifyProduct(Product product,ImageHolder image ,List<ImageHolder> productImgList) throws ProductException {
         if(product!=null&&product.getProductId()>0){
@@ -131,7 +137,7 @@ public class ProductServiceImpl implements ProductService {
         return -1;
     }
 
-    @Cacheable(cacheNames = "product",key = "'product'+#productId",cacheManager = "productCacheManager")
+    @Cacheable(cacheNames = "product",key = "'product'+#productId",unless = "#result==null")
     @Override
     public Product findProduct(Integer productId) {
         System.out.println("查询"+productId+"商品");

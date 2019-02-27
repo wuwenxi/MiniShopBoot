@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface LocalAuthRepository extends JpaRepository<LocalAuth,Integer> {
 
-    LocalAuth queryLocalAuthByUserName(String name);
+    LocalAuth queryByUserName(String name);
 }

@@ -72,15 +72,25 @@ public class MinishopApplicationTests {
     @Autowired
     RedisTemplate redisTemplate;
 
-    @Autowired
-    RedisTemplate<Object,Product> productRedisTemplate;
-
-
-
     /*@Qualifier("productCacheManager")//指定缓存管理器
     @Autowired
     RedisCacheManager productCacheManager;*/
 
+    @Autowired
+    LocalAuthRepository localAuthRepository;
+
+    @Test
+    public void testShiro(){
+        LocalAuth localAuth = localAuthRepository.queryByUserName("wws");
+        System.out.println(localAuth);
+        /*PersonInfo personInfo = new PersonInfo("xoxox","123",null,null,null,null,
+                null,1,new Date(),new Date());
+        personInfoRepository.save(personInfo);*/
+        /*PersonInfo personInfo = new PersonInfo();
+        personInfo.setPersonInfoId(1);
+        LocalAuth auth = new LocalAuth(personInfo,"wwx","123",new Date(),new Date());
+        localAuthRepository.save(auth);*/
+    }
 
     @Test
     public void testRedis(){
@@ -94,8 +104,8 @@ public class MinishopApplicationTests {
         product.setCreateTime(new Date());
         product.setLastEditTime(new Date());
         //productRedisTemplate.opsForValue().set("test1",product);
-        Product product1 = productRedisTemplate.opsForValue().get("test1");
-        System.out.println(product1);
+        //Product product1 = productRedisTemplate.opsForValue().get("test1");
+        //System.out.println(product1);
     }
 
     @Test
@@ -138,9 +148,9 @@ public class MinishopApplicationTests {
 
     @Test
     public void testPersonInfo() {
-        PersonInfo personInfo = new PersonInfo(1, "吴文锡", "男", "wwx@springboot.com", null
-                , 1, new Date(), new Date(), 0);
-        personInfoRepository.saveAndFlush(personInfo);
+      /*  PersonInfo personInfo = new PersonInfo(1, "吴文锡", "男", "wwx@springboot.com", null
+                , 1, new Date(), new Date(), 0);*/
+       // personInfoRepository.saveAndFlush(personInfo);
     }
 
     @Test

@@ -5,15 +5,12 @@ import com.wwx.minishop.entity.ShopCategory;
 import com.wwx.minishop.repository.ShopCategoryRepository;
 import com.wwx.minishop.service.ShopCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@CacheConfig(cacheManager = "shopCategoryCacheManager")
+@CacheConfig(cacheManager = "cacheManager")
 @Service
 public class ShopCategoryServiceImpl implements ShopCategoryService {
 
@@ -49,7 +46,15 @@ public class ShopCategoryServiceImpl implements ShopCategoryService {
         return 0;
     }
 
-    @CachePut(cacheNames = "shopCategory",key = "'shopCategory'+#shopCategory.shopCategoryId")
+    @Caching(
+            put = {
+                    @CachePut(cacheNames = "shopCategory",key = "'shopCategory'+#shopCategory.shopCategoryId")},
+            evict = {
+                    //是店铺类别更新，  清空店铺列表缓存及店铺类别类别缓存
+                    @CacheEvict(cacheNames = "shopCategoryList",key = "'parentId'+#shopCategory.parent.shopCategoryId"),
+                    @CacheEvict(cacheNames = "shopList",allEntries = true,cacheManager = "shopCacheManager")
+            }
+    )
     @Override
     public int updateShopCategory(ShopCategory shopCategory) {
         if (shopCategory!=null&&shopCategory.getShopCategoryId()!=null){

@@ -29,22 +29,20 @@ import java.util.Map;
 
 @RestController()
 @RequestMapping("/shop")
-public class ShopManagerController {
+public class ShopController {
 
     @Autowired
     ShopService shopService;
-
-    @Autowired
-    ShopCategoryService shopCategoryService;
 
     private ShopExecution execution = new ShopExecution();
 
     private Map<String,Object> map = new HashMap<>();
 
+    private ObjectMapper objectMapper = new ObjectMapper();
+
     @PutMapping("/modifyshop")
     public Msg ModifyShop(HttpServletRequest request){
         String shopStr = HttpServletRequestUtils.getString(request,"shop");
-        ObjectMapper objectMapper = new ObjectMapper();
         Shop shop;
         try {
             shop = objectMapper.readValue(shopStr,Shop.class);
@@ -53,6 +51,17 @@ public class ShopManagerController {
         }
         ShopExecution execution = shopService.modifyShop(shop, null);
         if (execution.getState().equals(ShopStateEnum.SUCCESS.getState())){
+            List<Shop> shopList = (List<Shop>) request.getSession().getAttribute("shopList");
+            if(shopList!=null&&shopList.size()>0){
+                for (Shop shop1:shopList){
+                    if(shop1.getShopId().equals(shop.getShopId())){
+                        shopList.remove(shop1);
+                        shopList.add(shop);
+                        break;
+                    }
+                }
+                request.getSession().setAttribute("shopList",shopList);
+            }
             return Msg.success().add("msg","更新成功");
         }else {
             return Msg.fail().add("msg","更新失败");
@@ -63,7 +72,6 @@ public class ShopManagerController {
     public Msg AddShop(HttpServletRequest request){
         //转换json数据
         String shopStr = HttpServletRequestUtils.getString(request, "shopStr");
-        ObjectMapper objectMapper = new ObjectMapper();
         Shop shop;
         try {
             shop = objectMapper.readValue(shopStr, Shop.class);
@@ -123,26 +131,6 @@ public class ShopManagerController {
         }
     }
 
-    @GetMapping("/getshopinitinfo/{parentId}")
-    public Msg getShopInitInfo(@PathVariable("parentId") Integer parentId){
-        if(parentId==null||parentId<0){
-            return Msg.fail().add("msg","查询类别错误");
-        }
-
-        ShopCategory parentCategory = new ShopCategory();
-        ShopCategory childCategory = new ShopCategory();
-        parentCategory.setShopCategoryId(parentId);
-        childCategory.setParent(parentCategory);
-
-        try {
-            List<ShopCategory> shopCategoryList = shopCategoryService.findShopCategoryWithParentId(childCategory);
-            map.put("shopCategoryList",shopCategoryList);
-            return Msg.success().add("map",map);
-        } catch (Exception e) {
-            return Msg.fail().add("msg","服务器错误");
-        }
-    }
-
     @GetMapping("/getshop/{shopId}")
     public Msg getShopById(@PathVariable("shopId") Integer shopId){
         if(shopId!=null){
@@ -158,29 +146,36 @@ public class ShopManagerController {
     public Msg getShopList(HttpServletRequest request){
         PersonInfo personInfo = new PersonInfo();
         personInfo.setUserId(1);
-        request.getSession().setAttribute("user",personInfo);
-        personInfo = (PersonInfo) request.getAttribute("user");
-        try {
-            Shop shop = new Shop();
-            shop.setOwner(personInfo);
-            if(personInfo.getUserId()!=null && personInfo.getUserId()>0){
-                List<Shop> shopList = shopService.findShopListWithOwner(shop);
-                if(shopList.size()> 0 ){
-                    map.put("shops",shopList);
-                    map.put("count",shopList.size());
-                }else {
-                    map.put("msg","当前账户没有开设店铺");
+        /*request.getSession().setAttribute("user",personInfo);
+        personInfo = (PersonInfo) request.getSession().getAttribute("user");*/
+
+        List<Shop> shopList = (List<Shop>) request.getSession().getAttribute("shopList");
+        if (shopList==null){
+            try {
+                Shop shop = new Shop();
+                shop.setOwner(personInfo);
+                if(personInfo.getUserId()!=null && personInfo.getUserId()>0){
+                    shopList = shopService.findShopListWithOwner(shop);
+                    request.getSession().setAttribute("shopList",shopList);
+                    if(shopList!=null && shopList.size()> 0 ){
+                        map.put("shops",shopList);
+                        map.put("count",shopList.size());
+                    }else {
+                        map.put("msg","当前账户没有开设店铺");
+                    }
+                    return Msg.success().add("map",map);
                 }
-                return Msg.success().add("map",map);
+                map.put("msg","服务器内部错误");
+                return Msg.fail().add("map",map);
+            } catch (Exception e) {
+                e.printStackTrace();
+                map.put("msg","服务器内部错误");
+                return Msg.fail().add("map",map);
             }
-            map.put("msg","服务器内部错误");
-            return Msg.fail().add("map",map);
-        } catch (Exception e) {
-            e.printStackTrace();
-            map.put("msg","服务器内部错误");
-            return Msg.fail().add("map",map);
+        }else {
+            map.put("shops",shopList);
+            map.put("count",shopList.size());
+            return Msg.success().add("map",map);
         }
     }
-
-
 }

@@ -2,8 +2,9 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    password: root
-    url: jdbc:mysql://localhost:3306/minishop?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    password: 123456
+    url: jdbc:mysql://192.168.1.247:3306/minishop?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    #url: jdbc:mysql://192.168.0.105:3306/minishop?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
     type: com.alibaba.druid.pool.DruidDataSource
 
     #druid 配置
@@ -36,9 +37,20 @@ spring:
 
 #连接redis
   redis:
-    host: 192.168.0.105
-
-
+    host: 192.168.1.247
+    #host:192.168.0.195
+    timeout: 1s   #redis连接超时1s
+    jedis:
+      pool:
+        max-active: 20
+        max-idle: 20
+        min-idle: 10
+        max-wait: -1ms
+  cache:
+    type: redis
+    redis:
+      time-to-live: 3600s     #缓存时效1小时
+      cache-null-values: false  #不缓存空值
 
 #配置mybatis相关文件
 mybatis:
@@ -46,6 +58,14 @@ mybatis:
   config-location: classpath:mybatis/mybatis-config.xml
   #mapper文件路径
   mapper-locations: classpath:mybatis/mapper/*.xml
+
+server:
+  port: 8080
+  servlet:
+    session:
+    #session 过期时间两小时 60*60*2 s
+      timeout: 7200s
+
 
 #debug: true
   #mybatis   开启驼峰命名法

@@ -2,7 +2,6 @@ package com.wwx.minishop.dao;
 
 import com.wwx.minishop.entity.Product;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
