@@ -1,5 +1,7 @@
 package com.wwx.minishop.config;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
@@ -24,8 +26,13 @@ public class RedisConfig extends CachingConfigurerSupport {
         Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(Object.class);
 
         //解决查询缓存转换异常的问题
-        ObjectMapper om = new ObjectMapper();
-        jackson2JsonRedisSerializer.setObjectMapper(om);
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        //解决解析json数据问题
+        objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+        objectMapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+
+        jackson2JsonRedisSerializer.setObjectMapper(objectMapper);
 
         // 配置序列化（解决乱码的问题）
         RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()

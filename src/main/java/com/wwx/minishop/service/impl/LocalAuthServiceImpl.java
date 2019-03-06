@@ -15,7 +15,8 @@ public class LocalAuthServiceImpl implements LocalAuthService {
     @Autowired
     LocalAuthRepository localAuthRepository;
 
-    @Cacheable(cacheNames = "localAuth",key = "'localAuth:'+#username")
+    //若返回值为空  不缓存
+    @Cacheable(cacheNames = "localAuth",key = "'localAuth:'+#username",unless = "#result==null")
     @Override
     public LocalAuth findLocalAuthWithName(String username) {
         return localAuthRepository.queryByUserName(username);

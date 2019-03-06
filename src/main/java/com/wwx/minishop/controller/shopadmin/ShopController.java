@@ -3,14 +3,17 @@ package com.wwx.minishop.controller.shopadmin;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wwx.minishop.beans.ImageHolder;
 import com.wwx.minishop.beans.Msg;
+import com.wwx.minishop.entity.LocalAuth;
 import com.wwx.minishop.entity.PersonInfo;
 import com.wwx.minishop.entity.Shop;
 import com.wwx.minishop.entity.ShopCategory;
 import com.wwx.minishop.enums.ShopStateEnum;
 import com.wwx.minishop.execution.ShopExecution;
+import com.wwx.minishop.service.LocalAuthService;
 import com.wwx.minishop.service.ShopCategoryService;
 import com.wwx.minishop.service.ShopService;
 import com.wwx.minishop.utils.HttpServletRequestUtils;
+import com.wwx.minishop.utils.PersonInfoUtils;
 import com.wwx.minishop.utils.ValidateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -100,10 +103,7 @@ public class ShopController {
 
         try {
             //前端页面不添加用户信息
-            //从session中获取用户信息  注册店铺需要登录  即可得到用户的信息
-            //PersonInfo info = (PersonInfo) request.getSession().getAttribute("user");
-            PersonInfo info = new PersonInfo();
-            info.setUserId(1);
+            PersonInfo info = PersonInfoUtils.getPersonInfo(request);
             shop.setOwner(info);
             request.setAttribute("user",info);
 
@@ -144,17 +144,14 @@ public class ShopController {
 
     @GetMapping("/getshoplist")
     public Msg getShopList(HttpServletRequest request){
-        PersonInfo personInfo = new PersonInfo();
-        personInfo.setUserId(1);
-        /*request.getSession().setAttribute("user",personInfo);
-        personInfo = (PersonInfo) request.getSession().getAttribute("user");*/
+        PersonInfo personInfo = PersonInfoUtils.getPersonInfo(request);
 
         List<Shop> shopList = (List<Shop>) request.getSession().getAttribute("shopList");
         if (shopList==null){
             try {
                 Shop shop = new Shop();
                 shop.setOwner(personInfo);
-                if(personInfo.getUserId()!=null && personInfo.getUserId()>0){
+                if(personInfo!=null && personInfo.getUserId()!=null && personInfo.getUserId()>0){
                     shopList = shopService.findShopListWithOwner(shop);
                     request.getSession().setAttribute("shopList",shopList);
                     if(shopList!=null && shopList.size()> 0 ){

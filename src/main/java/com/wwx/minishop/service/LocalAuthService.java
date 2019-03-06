@@ -6,5 +6,4 @@ public interface LocalAuthService {
 
     LocalAuth findLocalAuthWithName(String username);
 
-    //void findLocalAuthWithId(Integer localAuthId);
 }

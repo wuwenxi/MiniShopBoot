@@ -10,6 +10,7 @@ import com.wwx.minishop.entity.Shop;
 import com.wwx.minishop.service.ProductCategoryService;
 import com.wwx.minishop.service.ShopService;
 import com.wwx.minishop.utils.HttpServletRequestUtils;
+import com.wwx.minishop.utils.PersonInfoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -92,8 +93,7 @@ public class ProductCategoryController {
     //商品类别类别查询及分页
     @GetMapping("/getProductCategoryList/{pn}")
     public Msg getProductCategoryList(HttpServletRequest request,@PathVariable("pn")Integer pn){
-        PersonInfo info = new PersonInfo();
-        info.setUserId(1);
+        PersonInfo info = PersonInfoUtils.getPersonInfo(request);
         Shop shop = new Shop();
         shop.setOwner(info);
 
@@ -119,7 +119,7 @@ public class ProductCategoryController {
                 map.put("productCategoryPageInfo",productCategoryPageInfo);
             }else {
                 shopList = shopService.findShopListWithOwner(shop);
-                if(shopList.size()>0){
+                if(shopList!=null&&shopList.size()>0){
                     request.getSession().setAttribute("shopList",shopList);
                     for (Shop shop1:shopList){
                         List<ProductCategory> productCategories = productCategoryService.getCategoryList(shop1.getShopId());

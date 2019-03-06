@@ -5,10 +5,11 @@
     <title>Title</title>
 </head>
 <body>
-    <form action="/shopAdminLogin" method="post">
+    <form th:action="@{/userLogin}" method="post">
         用户：<input type="text" value="name" name="username" id="name">
         密码：<input type="text" value="password" name="password" id="password">
         <input type="submit" id="submit" name="登录">
     </form>
+    <a th:href="@{/logout}">注销</a>
 </body>
 </html>

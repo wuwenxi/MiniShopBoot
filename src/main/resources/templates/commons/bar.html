@@ -17,6 +17,7 @@
     <link rel="stylesheet" th:href="@{/assets/css/ace.min.css}" />
     <link rel="stylesheet" th:href="@{/assets/css/ace-rtl.min.css}" />
     <link rel="stylesheet" th:href="@{/assets/css/ace-skins.min.css}" />
+    <link rel="stylesheet" th:href="@{/css/commons.css}">
 
 
     <link rel="stylesheet" th:href="@{/assets/css/ace-ie.min.css}" />
@@ -74,15 +75,10 @@
                         </ul>
                     </li>
 
-                    <li class="light-blue">
-                        <a data-toggle="dropdown" href="#" class="dropdown-toggle">
-                            <img class="nav-user-photo" th:src="@{/assets/avatars/user.jpg}" alt="Jason's Photo" />
-                            <span class="user-info">
-                                        <small>欢迎光临,</small>
-                                        Jason
-                                    </span>
 
-                            <i class="icon-caret-down"></i>
+
+                    <li class="light-blue">
+                        <a data-toggle="dropdown" href="#" class="dropdown-toggle" id="userImg">
                         </a>
 
                         <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
@@ -102,12 +98,19 @@
 
                             <li class="divider"></li>
 
-                            <li>
-                                <a href="#">
+
+                            <form id="logout" th:action="@{/logout}" method="post" style="margin-left: 16px;color: #333;">
+                                <li>
+                                    <i class="icon-off"></i>
+                                    <button class="btn btn-default btn-xs mybtn" style="margin-top: -6px;">注销</button>
+                                </li>
+                            </form>
+                            <!--<li>
+                                <a href="#" id="logout">
                                     <i class="icon-off"></i>
                                     退出
                                 </a>
-                            </li>
+                            </li>-->
                         </ul>
                     </li>
                 </ul>

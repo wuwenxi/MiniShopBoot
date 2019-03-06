@@ -81,10 +81,15 @@ public class MinishopApplicationTests {
 
     @Test
     public void testShiro(){
-        LocalAuth localAuth = localAuthRepository.queryByUserName("wws");
+        LocalAuth localAuth = localAuthRepository.queryByUserName("admin");
         System.out.println(localAuth);
-        /*PersonInfo personInfo = new PersonInfo("xoxox","123",null,null,null,null,
-                null,1,new Date(),new Date());
+        /*PersonInfo personInfo = new PersonInfo();
+        personInfo.setUserId(1);
+        LocalAuth localAuth = new LocalAuth(null,personInfo,"admin",
+                "123456",new Date(),new Date());
+        localAuthRepository.save(localAuth);*/
+        /*PersonInfo personInfo = new PersonInfo(null,"吴文锡","男","15283840975@163.com",null,1,new Date(),
+                new Date(),0);
         personInfoRepository.save(personInfo);*/
         /*PersonInfo personInfo = new PersonInfo();
         personInfo.setPersonInfoId(1);

@@ -28,6 +28,12 @@
 
     <dependencies>
 
+        <!--引入spring security-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
         <!--引入缓存-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

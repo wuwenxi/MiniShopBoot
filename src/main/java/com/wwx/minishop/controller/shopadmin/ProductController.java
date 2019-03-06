@@ -14,6 +14,7 @@ import com.wwx.minishop.service.ProductImgService;
 import com.wwx.minishop.service.ProductService;
 import com.wwx.minishop.service.ShopService;
 import com.wwx.minishop.utils.HttpServletRequestUtils;
+import com.wwx.minishop.utils.PersonInfoUtils;
 import com.wwx.minishop.utils.ValidateUtil;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,8 +116,7 @@ public class ProductController {
         //1.查出所有当前用户下的所有店铺
         //2.通过店铺查询每个店铺下的商品
         //PersonInfo info = (PersonInfo) request.getSession().getAttribute("user");
-        PersonInfo info = new PersonInfo();
-        info.setUserId(1);
+        PersonInfo info = PersonInfoUtils.getPersonInfo(request);
         Shop shop = new Shop();
         shop.setOwner(info);
 
@@ -148,10 +148,12 @@ public class ProductController {
                 if(info.getUserId()!=null && info.getUserId()>0){
                     try {
                         shopList = shopService.findShopListWithOwner(shop);
-                        request.getSession().setAttribute("shopList",shopList);
-                        for (Shop shop1:shopList){
-                            products = productService.findProductListWithShopId(shop1.getShopId());
-                            productList.addAll(products);
+                        if(shopList!=null&&shopList.size()>0){
+                            request.getSession().setAttribute("shopList",shopList);
+                            for (Shop shop1:shopList){
+                                products = productService.findProductListWithShopId(shop1.getShopId());
+                                productList.addAll(products);
+                            }
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
