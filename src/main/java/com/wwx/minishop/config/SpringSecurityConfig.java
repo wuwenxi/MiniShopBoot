@@ -30,8 +30,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/shopManagerLogin","/userLogin").permitAll()
-                .antMatchers("/shopAdmin","/shopAdmin/**",
-                        "/shop/**","/product/**","/personInfo/**").hasAuthority("shopAdmin");
+                /*.antMatchers("/shopAdmin","/shopAdmin/**",
+                        "/shop/**","/product/**","/personInfo/**").hasAuthority("shopAdmin")*/
+                .anyRequest().authenticated();
 
         http.logout()
                 .permitAll().
@@ -47,6 +48,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .rememberMeParameter("remember-me")
                 .tokenRepository(tokenRepository())
                 .userDetailsService(localAuthDetailService);
+
+        http.csrf().disable();
     }
 
     @Autowired

@@ -52,7 +52,7 @@ public class ShopCategoryServiceImpl implements ShopCategoryService {
             evict = {
                     //是店铺类别更新，  清空店铺列表缓存及店铺类别类别缓存
                     @CacheEvict(cacheNames = "shopCategoryList",key = "'parentId'+#shopCategory.parent.shopCategoryId"),
-                    @CacheEvict(cacheNames = "shopList",allEntries = true,cacheManager = "shopCacheManager")
+                    @CacheEvict(cacheNames = "shopList",allEntries = true)
             }
     )
     @Override

@@ -36,20 +36,10 @@ public class ProductCategoryController {
     private ObjectMapper objectMapper = new ObjectMapper();
 
     @DeleteMapping("/deleteProductCategory/{productCategoryId}")
-    public Msg deleteProductCategory(HttpServletRequest request, @PathVariable("productCategoryId")Integer productCategoryId){
+    public Msg deleteProductCategory(@PathVariable("productCategoryId")Integer productCategoryId){
         if(productCategoryId>0){
             int num =  productCategoryService.deleteProductCategory(productCategoryId);
             if(num>0){
-                List<ProductCategory> productCategoryList = (List<ProductCategory>) request.getSession().getAttribute("productCategoryList");
-                if(productCategoryList!=null && productCategoryList.size()>0){
-                    for(ProductCategory productCategory:productCategoryList){
-                        if(productCategory.getProductCategoryId().equals(productCategoryId)){
-                            productCategoryList.remove(productCategory);
-                            break;
-                        }
-                    }
-                    request.getSession().setAttribute("productCategoryList",productCategoryList);
-                }
                 return Msg.success();
             }
         }
@@ -72,17 +62,6 @@ public class ProductCategoryController {
         if(productCategory!=null && productCategory.getProductCategoryId()>0){
             int num = productCategoryService.modifyProductCategory(productCategory);
             if (num>0){
-                List<ProductCategory> productCategoryList = (List<ProductCategory>)request.getSession().getAttribute("productCategoryList");
-                if(productCategoryList!=null && productCategoryList.size()>0){
-                    for (ProductCategory productCategory1:productCategoryList){
-                        if(productCategory1.getProductCategoryId().equals(productCategory.getProductCategoryId())){
-                            productCategoryList.remove(productCategory1);
-                            productCategoryList.add(productCategory);
-                            break;
-                        }
-                    }
-                    request.getSession().setAttribute("productCategoryList",productCategoryList);
-                }
                 return Msg.success();
             }
         }
@@ -100,39 +79,20 @@ public class ProductCategoryController {
         //分页
         PageMethod.startPage(pn,10);
 
-        List<ProductCategory> productCategoryList = (List<ProductCategory>) request.getSession().getAttribute("productCategoryList");
-        if(productCategoryList!=null&&productCategoryList.size()>0){
-            PageInfo<ProductCategory> productCategoryPageInfo = new PageInfo<>(productCategoryList,5);
-            map.put("productCategoryPageInfo",productCategoryPageInfo);
-            return Msg.success().add("map",map);
-        }
-
-        productCategoryList = new ArrayList<>();
+        List<ProductCategory> productCategoryList = new ArrayList<>();
         if(info.getUserId()!=null && info.getUserId()>0){
-            List<Shop> shopList = (List<Shop>) request.getSession().getAttribute("shopList");
-            if (shopList!=null && shopList.size()>0){
+            List<Shop> shopList = shopService.findShopListWithOwner(shop);
+            if(shopList!=null&&shopList.size()>0){
                 for (Shop shop1:shopList){
                     List<ProductCategory> productCategories = productCategoryService.getCategoryList(shop1.getShopId());
                     productCategoryList.addAll(productCategories);
                 }
-                PageInfo<ProductCategory> productCategoryPageInfo = new PageInfo<>(productCategoryList,5);
-                map.put("productCategoryPageInfo",productCategoryPageInfo);
-            }else {
-                shopList = shopService.findShopListWithOwner(shop);
-                if(shopList!=null&&shopList.size()>0){
-                    request.getSession().setAttribute("shopList",shopList);
-                    for (Shop shop1:shopList){
-                        List<ProductCategory> productCategories = productCategoryService.getCategoryList(shop1.getShopId());
-                        productCategoryList.addAll(productCategories);
-                    }
-                    if (productCategoryList.size()>0){
-                        PageInfo<ProductCategory> productCategoryPageInfo = new PageInfo<>(productCategoryList,5);
-                        map.put("productCategoryPageInfo",productCategoryPageInfo);
-                        request.getSession().setAttribute("productCategoryList",productCategoryList);
-                    }else {
-                        map.put("msg","当前店铺没有商品类别");
-                        return Msg.fail().add("map",map);
-                    }
+                if (productCategoryList.size()>0){
+                    PageInfo<ProductCategory> productCategoryPageInfo = new PageInfo<>(productCategoryList,5);
+                    map.put("productCategoryPageInfo",productCategoryPageInfo);
+                }else {
+                    map.put("msg","当前店铺没有商品类别");
+                    return Msg.fail().add("map",map);
                 }
             }
             return Msg.success().add("map",map);
@@ -156,13 +116,6 @@ public class ProductCategoryController {
             int num = productCategoryService.addProductCategory(productCategory);
             if(num>0){
                 map.put("msg","保存成功");
-                //将类别添加到session中
-                List<ProductCategory> productCategoryList = (List<ProductCategory>) request.getSession().getAttribute("productCategoryList");
-                if(productCategoryList==null||productCategoryList.size()==0){
-                    productCategoryList = new ArrayList<>();
-                }
-                productCategoryList.add(productCategory);
-                request.getSession().setAttribute("productCategoryList",productCategoryList);
                 return Msg.success().add("map",map);
             }
             map.put("msg","服务器内部错误");

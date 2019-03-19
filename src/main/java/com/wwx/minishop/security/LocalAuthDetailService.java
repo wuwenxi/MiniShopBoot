@@ -4,6 +4,7 @@ import com.wwx.minishop.entity.LocalAuth;
 import com.wwx.minishop.repository.LocalAuthRepository;
 import com.wwx.minishop.service.LocalAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,6 +12,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 
 @Component
@@ -23,6 +27,9 @@ public class LocalAuthDetailService implements UserDetailsService {
     @Autowired
     LocalAuthService localAuthService;
 
+    @Autowired
+    HttpServletRequest request;
+
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
         if(userName ==null){
@@ -31,6 +38,7 @@ public class LocalAuthDetailService implements UserDetailsService {
             LocalAuth localAuth = localAuthService.findLocalAuthWithName(userName);
             if(localAuth!=null){
                 String password = passwordEncoder.encode(localAuth.getPassword());
+                request.getSession().setAttribute("localAuth",localAuth);
                 String authority = null;
                 if(localAuth.getPersonInfo().getUserType()!=null){
                     switch (localAuth.getPersonInfo().getUserType()){

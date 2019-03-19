@@ -51,7 +51,7 @@ $(function () {
 
             //按钮
             status = $("<button></button>").addClass("btn btn-primary btn-xs enable_status")
-                .append("切换状态").attr("productId", item.productId).attr("status", contraryStatus);
+                .append("切换状态").attr("productId", item.productId).attr("shopId",item.shop.shopId).attr("status", contraryStatus);
             //制作表格  appendTo:将表添加到 emp_tbl 的 tbody当中
             preview = $("<button></button>").addClass("btn btn-info btn-xs preview")
                 .append("预览商品").attr("productId",item.productId);
@@ -153,10 +153,13 @@ $(function () {
             var product ={};
             product.productId = productId;
             product.enableStatus = status;
+            product.shop={
+                shopId:$(this).attr("shopId")
+            };
             $.ajax({
                 url:"/product/modifyProduct",
                 data:{product:JSON.stringify(product)},
-                type:"POST",
+                type:"PUT",
                 success:function () {
                     to_page(currentPage);
                 }

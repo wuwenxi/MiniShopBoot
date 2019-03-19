@@ -25,17 +25,25 @@ public class PersonInfoController {
 
     @GetMapping("/initPersonInfo")
     public Msg initPersonInfo(HttpServletRequest request){
-        String localAuthName = request.getUserPrincipal().getName();
-        if(localAuthName!=null){
-            LocalAuth localAuth = localAuthService.findLocalAuthWithName(localAuthName);
-            if(localAuth!=null){
-                request.getSession().setAttribute("localAuth",localAuth);
-                map.put("personInfo",localAuth.getPersonInfo());
-                return Msg.success().add("map",map);
+        LocalAuth localAuth = (LocalAuth) request.getSession().getAttribute("localAuth");
+        if(localAuth!=null){
+            request.getSession().setAttribute("localAuth",localAuth);
+            map.put("personInfo",localAuth.getPersonInfo());
+            return Msg.success().add("map",map);
+        }else {
+            //获取用户名
+            String localAuthName = request.getUserPrincipal().getName();
+            if(localAuthName!=null){
+                localAuth = localAuthService.findLocalAuthWithName(localAuthName);
+                if(localAuth!=null){
+                    request.getSession().setAttribute("localAuth",localAuth);
+                    map.put("personInfo",localAuth.getPersonInfo());
+                    return Msg.success().add("map",map);
+                }
             }
+            map.put("msg","未登录");
+            return Msg.fail().add("map",map);
         }
-        map.put("msg","未登录");
-        return Msg.fail().add("map",map);
     }
 
 }

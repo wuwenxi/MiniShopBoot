@@ -20,6 +20,13 @@ $(function () {
                         +"<i class='icon-caret-down'></i>";
                     $("#userImg").html(html);
                 }
+            }else {
+                html = "<img class='nav-user-photo' src='"+person.profileImg+"' />"
+                    +"<span class='user-info'>" +
+                    "<small>欢迎光临,</small>" +person.name+
+                    "</span>"
+                    +"<i class='icon-caret-down'></i>";
+                $("#userImg").html(html);
             }
         }
     })

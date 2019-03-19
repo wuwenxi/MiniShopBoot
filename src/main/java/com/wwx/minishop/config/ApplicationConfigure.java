@@ -1,5 +1,7 @@
 package com.wwx.minishop.config;
 
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.*;
@@ -31,4 +33,15 @@ public class ApplicationConfigure implements WebMvcConfigurer {
          */
         registry.addResourceHandler("/upload/**").addResourceLocations("file:D:/Project/MiniShop/image/upload/");
     }
+
+    /**
+     *       定制rabbitmq消息封装与解析
+     *       默认为java序列化机制，这里改为json数据类型
+     *
+     * @return
+     */
+    /*@Bean
+    public MessageConverter messageConverter(){
+        return new Jackson2JsonMessageConverter();
+    }*/
 }

@@ -26,13 +26,6 @@ public class ShopCategoryController {
     @GetMapping("/getshopinitinfo/{parentId}")
     public Msg getShopInitInfo(HttpServletRequest request, @PathVariable("parentId") Integer parentId){
 
-        List<ShopCategory> shopCategoryList = (List<ShopCategory>) request.getSession().getAttribute("shopCategoryList");
-        if(shopCategoryList!=null && shopCategoryList.size()>0){
-            map.put("shopCategoryList",shopCategoryList);
-            return Msg.success().add("map",map);
-        }
-
-
         if(parentId==null||parentId<0){
             return Msg.fail().add("msg","查询类别错误");
         }
@@ -43,7 +36,7 @@ public class ShopCategoryController {
         childCategory.setParent(parentCategory);
 
         try {
-            shopCategoryList = shopCategoryService.findShopCategoryWithParentId(childCategory);
+            List<ShopCategory> shopCategoryList = shopCategoryService.findShopCategoryWithParentId(childCategory);
             map.put("shopCategoryList",shopCategoryList);
             request.getSession().setAttribute("shopCategoryList",shopCategoryList);
             return Msg.success().add("map",map);

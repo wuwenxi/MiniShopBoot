@@ -3,14 +3,10 @@ package com.wwx.minishop.controller.shopadmin;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wwx.minishop.beans.ImageHolder;
 import com.wwx.minishop.beans.Msg;
-import com.wwx.minishop.entity.LocalAuth;
 import com.wwx.minishop.entity.PersonInfo;
 import com.wwx.minishop.entity.Shop;
-import com.wwx.minishop.entity.ShopCategory;
 import com.wwx.minishop.enums.ShopStateEnum;
 import com.wwx.minishop.execution.ShopExecution;
-import com.wwx.minishop.service.LocalAuthService;
-import com.wwx.minishop.service.ShopCategoryService;
 import com.wwx.minishop.service.ShopService;
 import com.wwx.minishop.utils.HttpServletRequestUtils;
 import com.wwx.minishop.utils.PersonInfoUtils;
@@ -44,7 +40,7 @@ public class ShopController {
     private ObjectMapper objectMapper = new ObjectMapper();
 
     @PutMapping("/modifyshop")
-    public Msg ModifyShop(HttpServletRequest request){
+    public Msg ModifyShop(HttpServletRequest request) throws IOException {
         String shopStr = HttpServletRequestUtils.getString(request,"shop");
         Shop shop;
         try {
@@ -52,19 +48,27 @@ public class ShopController {
         } catch (IOException e) {
             return Msg.fail().add("msg","服务器内部错误");
         }
-        ShopExecution execution = shopService.modifyShop(shop, null);
-        if (execution.getState().equals(ShopStateEnum.SUCCESS.getState())){
-            List<Shop> shopList = (List<Shop>) request.getSession().getAttribute("shopList");
-            if(shopList!=null&&shopList.size()>0){
-                for (Shop shop1:shopList){
-                    if(shop1.getShopId().equals(shop.getShopId())){
-                        shopList.remove(shop1);
-                        shopList.add(shop);
-                        break;
-                    }
-                }
-                request.getSession().setAttribute("shopList",shopList);
+
+        //解析图片
+        MultipartFile shopImage = null;
+        MultipartResolver resolver = new CommonsMultipartResolver(request.getSession().getServletContext());
+        if(resolver.isMultipart(request)){
+            MultipartHttpServletRequest servletRequest = (MultipartHttpServletRequest) request;
+            shopImage = servletRequest.getFile("shopImg");
+        }
+
+        PersonInfo person = PersonInfoUtils.getPersonInfo(request);
+        shop.setOwner(person);
+
+        if(shopImage!=null){
+            if(!ValidateUtil.checkShopImage(shopImage.getOriginalFilename())){
+                return Msg.fail().add("msg","文件格式错误！请传入图片");
             }
+            execution = shopService.modifyShop(shop, new ImageHolder(shopImage.getOriginalFilename(),shopImage.getInputStream()));
+        }else
+            execution = shopService.modifyShop(shop,null);
+
+        if (execution.getState().equals(ShopStateEnum.SUCCESS.getState())){
             return Msg.success().add("msg","更新成功");
         }else {
             return Msg.fail().add("msg","更新失败");
@@ -105,23 +109,10 @@ public class ShopController {
             //前端页面不添加用户信息
             PersonInfo info = PersonInfoUtils.getPersonInfo(request);
             shop.setOwner(info);
-            request.setAttribute("user",info);
 
             execution = shopService.addShop(shop,new ImageHolder(shopImage.getOriginalFilename(),shopImage.getInputStream()));
 
-            //如果状态为审核，则返回正确，否则错误
             if (execution.getState().equals(ShopStateEnum.CHECK.getState())) {
-                /**
-                 *          用户和店铺是一对多的关系
-                 *          注册店铺或将店铺信息保存到session中
-                 */
-                List<Shop> shopList = (List<Shop>) request.getSession().getAttribute("shopList");
-                if(shopList == null || shopList.size()==0){
-                    shopList = new ArrayList<>();
-                }
-                //把刚刚注册的店铺添加到列表中
-                shopList.add(execution.getShop());
-                request.getSession().setAttribute("shopList",shopList);
                 return Msg.success().add("execution",execution);
             } else {
                 return Msg.fail().add("msg", execution.getStateInfo());
@@ -145,34 +136,25 @@ public class ShopController {
     @GetMapping("/getshoplist")
     public Msg getShopList(HttpServletRequest request){
         PersonInfo personInfo = PersonInfoUtils.getPersonInfo(request);
-
-        List<Shop> shopList = (List<Shop>) request.getSession().getAttribute("shopList");
-        if (shopList==null){
-            try {
-                Shop shop = new Shop();
-                shop.setOwner(personInfo);
-                if(personInfo!=null && personInfo.getUserId()!=null && personInfo.getUserId()>0){
-                    shopList = shopService.findShopListWithOwner(shop);
-                    request.getSession().setAttribute("shopList",shopList);
-                    if(shopList!=null && shopList.size()> 0 ){
-                        map.put("shops",shopList);
-                        map.put("count",shopList.size());
-                    }else {
-                        map.put("msg","当前账户没有开设店铺");
-                    }
-                    return Msg.success().add("map",map);
+        try {
+            Shop shop = new Shop();
+            shop.setOwner(personInfo);
+            if(personInfo!=null && personInfo.getUserId()!=null && personInfo.getUserId()>0){
+                List<Shop> shopList = shopService.findShopListWithOwner(shop);
+                if(shopList!=null && shopList.size()> 0 ){
+                    map.put("shops",shopList);
+                    map.put("count",shopList.size());
+                }else {
+                    map.put("msg","当前账户没有开设店铺");
                 }
-                map.put("msg","服务器内部错误");
-                return Msg.fail().add("map",map);
-            } catch (Exception e) {
-                e.printStackTrace();
-                map.put("msg","服务器内部错误");
-                return Msg.fail().add("map",map);
+                return Msg.success().add("map",map);
             }
-        }else {
-            map.put("shops",shopList);
-            map.put("count",shopList.size());
-            return Msg.success().add("map",map);
+            map.put("msg","服务器内部错误");
+            return Msg.fail().add("map",map);
+        } catch (Exception e) {
+            e.printStackTrace();
+            map.put("msg","服务器内部错误");
+            return Msg.fail().add("map",map);
         }
     }
 }

@@ -28,6 +28,17 @@
 
     <dependencies>
 
+        <!--引入高级消息队列 整合rabbitmq-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
+        </dependency>
+        <!--实现热部署-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+        </dependency>
         <!--引入spring security-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

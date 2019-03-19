@@ -28,9 +28,6 @@ public class ShopServiceImpl implements ShopService {
     @Autowired
     ShopMapper shopMapper;
 
-    @Autowired
-    ShopRepository shopRepository;
-
     @Cacheable(cacheNames = "shopList",key = "'own'+#shop.owner.userId",unless = "#result==null")
     @Override
     public List<Shop> findShopListWithOwner(Shop shop) {
@@ -54,8 +51,13 @@ public class ShopServiceImpl implements ShopService {
     @Override
     public ShopExecution modifyShop(Shop shop, ImageHolder image) throws ShopException{
         //获取文件输入流  以及文件名
-        InputStream in = image.getInputStream();
-        String fileName = image.getFileName();
+        InputStream in = null;
+        String fileName = null;
+
+        if(image!=null){
+            in = image.getInputStream();
+            fileName = image.getFileName();
+        }
 
         if(shop == null || shop.getShopId() == null){
             return new ShopExecution(ShopStateEnum.NULL_SHOP);
@@ -64,10 +66,10 @@ public class ShopServiceImpl implements ShopService {
             try {
                 if(in != null && fileName!= null
                         && !"".equals(fileName)){
-                    //Shop shopImg = mapper.queryShopById(shop.getShopId());
-                    Optional<Shop> shopImg = shopRepository.findById(shop.getShopId());
-                    if(shopImg.get().getShopImg()!=null){
-                        ImageUtils.deleteFileOrPath(shopImg.get().getShopImg());
+                    Shop shopImg = shopMapper.queryShopById(shop.getShopId());
+                    //Optional<Shop> shopImg = shopRepository.findById(shop.getShopId());
+                    if(shopImg.getShopImg()!=null){
+                        ImageUtils.deleteFileOrPath(shopImg.getShopImg());
                     }
                     //更新图片
                     addShopImg(shop,image);
@@ -79,8 +81,7 @@ public class ShopServiceImpl implements ShopService {
                 } catch (Exception e) {
                     return new ShopExecution(ShopStateEnum.INNER_ERROR);
                 }
-                //shop = mapper.queryShopById(shop.getShopId());
-                shop = shopRepository.getOne(shop.getShopId());
+                shop = shopMapper.queryShopById(shop.getShopId());
                 return new ShopExecution(ShopStateEnum.SUCCESS,shop);
             } catch (Exception e) {
                 return new ShopExecution(ShopStateEnum.INNER_ERROR);

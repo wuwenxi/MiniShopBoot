@@ -8,7 +8,7 @@ public class PersonInfoUtils {
 
     public static PersonInfo getPersonInfo(HttpServletRequest request){
         LocalAuth localAuth = (LocalAuth) request.getSession().getAttribute("localAuth");
-        if(localAuth.getPersonInfo()!=null){
+        if(localAuth!=null && localAuth.getPersonInfo()!=null){
             request.getSession().setAttribute("personInfo",localAuth.getPersonInfo());
             return localAuth.getPersonInfo();
         }

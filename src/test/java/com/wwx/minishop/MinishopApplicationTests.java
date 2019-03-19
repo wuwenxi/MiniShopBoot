@@ -6,19 +6,16 @@ import com.wwx.minishop.dao.ProductMapper;
 import com.wwx.minishop.dao.ShopCategoryMapper;
 import com.wwx.minishop.dao.ShopMapper;
 import com.wwx.minishop.entity.*;
-import com.wwx.minishop.enums.ShopStateEnum;
-import com.wwx.minishop.exception.ProductException;
-import com.wwx.minishop.execution.ShopExecution;
 import com.wwx.minishop.repository.*;
 import com.wwx.minishop.service.ProductService;
 import com.wwx.minishop.service.ShopService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.rabbit.core.RabbitAdmin;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.cache.Cache;
-import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -27,10 +24,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -72,30 +66,64 @@ public class MinishopApplicationTests {
     @Autowired
     RedisTemplate redisTemplate;
 
+    @Autowired
+    RabbitTemplate rabbitTemplate;
+
+
+
+    @Test
+    public void testRabbitMqHandler(){
+        /*Map<String,Object> map = new HashMap<>();
+        map.put("shop",new Shop());
+        map.put("imageHolder",new ImageHolder(null,null));*/
+    }
+
+    @Test
+    public void testRabbitAdmin(){
+        //参数：1、交换器名 2、是否持久化 3、是否自动删除
+        //DirectExchange exchange = new DirectExchange("shop");
+        /*DirectExchange exchange = new DirectExchange("product");
+        rabbitAdmin.declareExchange(exchange);*/
+        //参数：1、队列名 2、是否持久化
+        /*rabbitAdmin.declareQueue(new Queue("add.shop",true));
+        rabbitAdmin.declareQueue(new Queue("modify.shop",true));
+        rabbitAdmin.declareQueue(new Queue("add.product",true));
+        rabbitAdmin.declareQueue(new Queue("modify.product",true));
+        System.out.println("创建完成");*/
+        //rabbitAdmin.deleteQueue("add.shop");
+        //参数：1.绑定的队列名 2、绑定类别 3、交换器 4、指定路由值 5、map类别的参数
+        /*rabbitAdmin.declareBinding(new Binding("add.shop",Binding.DestinationType.QUEUE,
+                "shop","add",null));
+        rabbitAdmin.declareBinding(new Binding("modify.shop",Binding.DestinationType.QUEUE,
+                "shop","modify",null));
+        rabbitAdmin.declareBinding(new Binding("add.product",Binding.DestinationType.QUEUE,
+                "product","add",null));
+        rabbitAdmin.declareBinding(new Binding("modify.product",Binding.DestinationType.QUEUE,
+                "product","modify",null));*/
+    }
+
+    @Test
+    public void testsRabbit(){
+        String exchange = "shop";
+        String routingKey = "add";
+        Shop object = new Shop();
+        object.setShopId(1);
+        rabbitTemplate.convertAndSend(exchange,routingKey,object);
+    }
+
+    @Test
+    public void receive(){
+        Object o = rabbitTemplate.receiveAndConvert("add", 200);
+        System.out.println(o.getClass());
+        System.out.println(o);
+    }
+
     /*@Qualifier("productCacheManager")//指定缓存管理器
     @Autowired
     RedisCacheManager productCacheManager;*/
 
     @Autowired
     LocalAuthRepository localAuthRepository;
-
-    @Test
-    public void testShiro(){
-        LocalAuth localAuth = localAuthRepository.queryByUserName("admin");
-        System.out.println(localAuth);
-        /*PersonInfo personInfo = new PersonInfo();
-        personInfo.setUserId(1);
-        LocalAuth localAuth = new LocalAuth(null,personInfo,"admin",
-                "123456",new Date(),new Date());
-        localAuthRepository.save(localAuth);*/
-        /*PersonInfo personInfo = new PersonInfo(null,"吴文锡","男","15283840975@163.com",null,1,new Date(),
-                new Date(),0);
-        personInfoRepository.save(personInfo);*/
-        /*PersonInfo personInfo = new PersonInfo();
-        personInfo.setPersonInfoId(1);
-        LocalAuth auth = new LocalAuth(personInfo,"wwx","123",new Date(),new Date());
-        localAuthRepository.save(auth);*/
-    }
 
     @Test
     public void testRedis(){

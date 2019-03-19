@@ -115,51 +115,31 @@ public class ProductController {
     public Msg getProductList(HttpServletRequest request,@Param("shopId")Integer shopId,@PathVariable("pn")Integer pn){
         //1.查出所有当前用户下的所有店铺
         //2.通过店铺查询每个店铺下的商品
-        //PersonInfo info = (PersonInfo) request.getSession().getAttribute("user");
         PersonInfo info = PersonInfoUtils.getPersonInfo(request);
         Shop shop = new Shop();
         shop.setOwner(info);
 
         PageMethod.startPage(pn,10);
-        List<Product> productList = (List<Product>) request.getSession().getAttribute("productList");
-        if(productList!=null){
-            PageInfo<Product> productPageInfo = new PageInfo<>(productList,5);
-            map.put("productPageInfo",productPageInfo);
-            return Msg.success().add("map",map);
-        }
+
 
         //若没有商品列表
-        productList = new ArrayList<>();
+        List<Product> productList = new ArrayList<>();
         List<Product> products;
         if(shopId == null){
-
-            List<Shop> shopList = (List<Shop>) request.getSession().getAttribute("shopList");
-
-            if (shopList!=null){
+            if(info.getUserId()!=null && info.getUserId()>0){
                 try {
-                    for (Shop shop1:shopList){
-                        products = productService.findProductListWithShopId(shop1.getShopId());
-                        productList.addAll(products);
+                    List<Shop> shopList = shopService.findShopListWithOwner(shop);
+                    if(shopList!=null&&shopList.size()>0){
+                        //request.getSession().setAttribute("shopList",shopList);
+                        for (Shop shop1:shopList){
+                            products = productService.findProductListWithShopId(shop1.getShopId());
+                            productList.addAll(products);
+                        }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                }
-            }else {
-                if(info.getUserId()!=null && info.getUserId()>0){
-                    try {
-                        shopList = shopService.findShopListWithOwner(shop);
-                        if(shopList!=null&&shopList.size()>0){
-                            request.getSession().setAttribute("shopList",shopList);
-                            for (Shop shop1:shopList){
-                                products = productService.findProductListWithShopId(shop1.getShopId());
-                                productList.addAll(products);
-                            }
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        map.put("msg","获取商品信息失败");
-                        return Msg.fail().add("map",map);
-                    }
+                    map.put("msg","获取商品信息失败");
+                    return Msg.fail().add("map",map);
                 }
             }
         }else {
@@ -170,7 +150,6 @@ public class ProductController {
         if (productList.size()>0){
             PageInfo<Product> productPageInfo = new PageInfo<>(productList,5);
             map.put("productPageInfo",productPageInfo);
-            request.getSession().setAttribute("productList",productList);
         }else {
             map.put("msg","店铺未创建任何商品");
             return Msg.fail().add("map",map);
@@ -210,18 +189,7 @@ public class ProductController {
             e.printStackTrace();
         }
 
-        //商品添加成功后加入到session中
         int num = productService.addProduct(product,image,productImgList);
-        try {
-            List<Product> productList = (List<Product>)request.getSession().getAttribute("productList");
-            if(productList==null||productList.size()==0){
-                productList = new ArrayList<>();
-            }
-            productList.add(product);
-            request.getSession().setAttribute("productList",productList);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         if (num>0){
             return Msg.success();
         }else {
