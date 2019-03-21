@@ -3,6 +3,7 @@ package com.wwx.minishop.service.impl;
 import com.wwx.minishop.beans.ImageHolder;
 import com.wwx.minishop.dao.ShopMapper;
 import com.wwx.minishop.entity.Shop;
+import com.wwx.minishop.entity.ShopCategory;
 import com.wwx.minishop.enums.ShopStateEnum;
 import com.wwx.minishop.exception.ShopException;
 import com.wwx.minishop.execution.ShopExecution;
@@ -28,7 +29,7 @@ public class ShopServiceImpl implements ShopService {
     @Autowired
     ShopMapper shopMapper;
 
-    @Cacheable(cacheNames = "shopList",key = "'own'+#shop.owner.userId",unless = "#result==null")
+    @Cacheable(cacheNames = "shopList",key = "'own'+#shop.owner.userId",unless = "#result == 0")
     @Override
     public List<Shop> findShopListWithOwner(Shop shop) {
         //从第一行开始查询  店铺总数不允许超过10个
@@ -45,7 +46,8 @@ public class ShopServiceImpl implements ShopService {
                     @CachePut(cacheNames = "shop",key = "'shop'+#shop.shopId")},
             evict = {
                     //数据更新 清空shopList的缓存
-                    @CacheEvict(cacheNames = "shopList",key = "'own'+#shop.owner.userId")
+                    @CacheEvict(cacheNames = "shopList",key = "'own'+#shop.owner.userId"),
+                    @CacheEvict(cacheNames = "shopListWithCategoryId",allEntries = true)
             }
     )
     @Override
@@ -100,7 +102,12 @@ public class ShopServiceImpl implements ShopService {
         return null;
     }
 
-    @CacheEvict(cacheNames = "shopList",key = "'own'+#shop.owner.userId")
+    @Caching(
+            evict = {
+                    @CacheEvict(cacheNames = "shopList",key = "'own'+#shop.owner.userId"),
+                    @CacheEvict(cacheNames = "shopListWithCategoryId",key = "'shopCategoryId'+#shop.shopCategory.shopCategoryId")
+            }
+    )
     @Override
     public ShopExecution addShop(Shop shop, ImageHolder image) {
         if(shop == null){
@@ -158,5 +165,17 @@ public class ShopServiceImpl implements ShopService {
             throw new ShopException("addShop ERROR : "+e.getMessage());
         }
 
+    }
+
+    @Cacheable(cacheNames = "shopListWithCategoryId",key = "'shopCategoryId'+#shopCategoryId",unless = "#result == null ")
+    @Override
+    public List<Shop> findShopListWithShopCategory(Integer shopCategoryId) {
+        ShopCategory shopCategory = new ShopCategory();
+        shopCategory.setShopCategoryId(shopCategoryId);
+        List<Shop> shops = shopMapper.queryShopsByShopCategoryId(shopCategory);
+        if(shops!=null&&shops.size()>0){
+            return shops;
+        }
+        return null;
     }
 }

@@ -69,6 +69,16 @@
         s.shop_id = #{shopId}
     </select>
 
+    <select id="queryShopsByShopCategoryId" resultMap="MyType">
+        select s.shop_id,s.shop_name,s.shop_desc,s.shop_img,s.priority,s.shop_address,
+        s.phone,s.create_time,s.last_edit_time,s.enable_status,s.advice,
+        sc.shop_category_id,sc.shop_category_name
+        from tb_shop s
+        left join tb_shop_category sc on s.shop_category_id = sc.shop_category_id
+        where
+        s.shop_category_id = #{shopCategory.shopCategoryId}
+    </select>
+
     <insert id="insertShop" useGeneratedKeys="true" keyColumn="shop_id" keyProperty="shopId">
         insert into
         tb_shop(shop_id,owner_id,shop_category_id,shop_name,shop_desc,

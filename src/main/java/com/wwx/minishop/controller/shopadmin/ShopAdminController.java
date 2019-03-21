@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/shopAdmin")
 public class ShopAdminController {
 
-    private static final String prefix = "ShopAdmin/";//前缀prefix  后缀 suffix
+    private static final String prefix = "shopAdmin/";//前缀prefix  后缀 suffix
 
     @GetMapping()
     public String ShopAdminIndex(){

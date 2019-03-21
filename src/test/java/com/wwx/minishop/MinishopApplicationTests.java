@@ -8,6 +8,7 @@ import com.wwx.minishop.dao.ShopMapper;
 import com.wwx.minishop.entity.*;
 import com.wwx.minishop.repository.*;
 import com.wwx.minishop.service.ProductService;
+import com.wwx.minishop.service.ShopCategoryService;
 import com.wwx.minishop.service.ShopService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -141,13 +142,22 @@ public class MinishopApplicationTests {
         //System.out.println(product1);
     }
 
+    @Autowired
+    ShopCategoryService shopCategoryService;
+
     @Test
     public void test01()  {
-        ProductCategory productCategory = new ProductCategory();
-        productCategory.setProductCategoryId(1);
-        productCategory.setProductCategoryName("原味咖啡");
-        int num = productCategoryMapper.updateProductCategory(productCategory);
-        System.out.println();
+        /*List<Shop> list = shopService.findShopListWithShopCategory(9);
+        System.out.println(list);*/
+        ShopCategory category = new ShopCategory();
+        ShopCategory parent = new ShopCategory();
+        parent.setShopCategoryId(1);
+        category.setParent(parent);
+        List<ShopCategory> allShopCategory = shopCategoryService.findShopCategoryWithParentId(category);
+        System.out.println(allShopCategory.size());
+        System.out.println(allShopCategory);
+        /*ShopCategory shopCategoryById = shopCategoryService.findShopCategoryById(14);
+        System.out.println(shopCategoryById);*/
     }
 
     @Test
@@ -188,16 +198,24 @@ public class MinishopApplicationTests {
 
     @Test
     public void testShopCategory() {
-        ShopCategory parent = new ShopCategory();
-        parent.setShopCategoryId(8);
-        ShopCategory shopCategory0 = new ShopCategory(null, "日常用品", "日常用品", 0,
-                new Date(), new Date(), parent);
-        ShopCategory shopCategory1 = new ShopCategory(null, "洗涤", "洗涤", 0,
-                new Date(), new Date(), parent);
-        ShopCategory shopCategory2 = new ShopCategory(null, "杂货铺", "杂货铺", 0,
-                new Date(), new Date(), parent);
-        ShopCategory shopCategory3 = new ShopCategory(null, "文具店", "文具店", 0,
-                new Date(), new Date(), parent);
+        /*ShopCategory parent = new ShopCategory();
+        parent.setShopCategoryId(8);*/
+        ShopCategory shopCategory0 = new ShopCategory(null, "美食饮品", "美食饮品", 0,
+                new Date(), new Date(), null);
+        ShopCategory shopCategory1 = new ShopCategory(null, "二手市场", "二手市场", 0,
+                new Date(), new Date(), null);
+        ShopCategory shopCategory2 = new ShopCategory(null, "租赁市场", "租赁市场", 0,
+                new Date(), new Date(), null);
+        ShopCategory shopCategory3 = new ShopCategory(null, "休闲娱乐", "休闲娱乐", 0,
+                new Date(), new Date(), null);
+        ShopCategory shopCategory4 = new ShopCategory(null, "美容美发", "美容美发", 0,
+                new Date(), new Date(), null);
+        ShopCategory shopCategory5 = new ShopCategory(null, "培训教育", "培训教育", 0,
+                new Date(), new Date(), null);
+        ShopCategory shopCategory6 = new ShopCategory(null, "运动健身", "运动健身", 0,
+                new Date(), new Date(), null);
+        ShopCategory shopCategory7 = new ShopCategory(null, "其他", "其他", 0,
+                new Date(), new Date(), null);
 
 
         List<ShopCategory> shopCategoryArrayList = new ArrayList<>();
@@ -205,6 +223,10 @@ public class MinishopApplicationTests {
         shopCategoryArrayList.add(shopCategory1);
         shopCategoryArrayList.add(shopCategory2);
         shopCategoryArrayList.add(shopCategory3);
+        shopCategoryArrayList.add(shopCategory4);
+        shopCategoryArrayList.add(shopCategory5);
+        shopCategoryArrayList.add(shopCategory6);
+        shopCategoryArrayList.add(shopCategory7);
 
         shopCategoryRepository.saveAll(shopCategoryArrayList);
     }

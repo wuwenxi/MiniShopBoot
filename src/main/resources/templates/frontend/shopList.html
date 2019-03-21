@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="frontend/bar::head_file">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+    <div th:replace="frontend/bar::head_top"></div>
+
+    <!--搜索栏-->
+    <div th:replace="frontend/bar::head_search"></div>
+
+    <!--导航栏-->
+    <div th:replace="frontend/bar::navigation"></div>
+
+    <ul class="breadcrumb">
+        <li><h4>当前位置：</h4></li>
+        <li><a href="#">2013</a></li>
+        <li class="active">十一月</li>
+    </ul>
+
+
+    <script th:src="@{/js/jquery/jquery-1.11.3.min.js}"></script>
+    <script th:src="@{/js/minishop/shoplist.js}"></script>
+    <script th:src="@{/js/commons/common.js}"></script>
+    <script th:src="@{/js/minishop/commons.js}"></script>
+
+</body>
+</html>

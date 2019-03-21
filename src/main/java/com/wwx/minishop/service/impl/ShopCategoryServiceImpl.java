@@ -20,18 +20,30 @@ public class ShopCategoryServiceImpl implements ShopCategoryService {
     @Autowired
     ShopCategoryRepository shopCategoryRepository;
 
-    @Cacheable(cacheNames = "shopCategoryList",key = "'parentId'+#shopCategory.parent.shopCategoryId")
+    @Cacheable(cacheNames = "shopCategoryList",key = "'parentId'+#shopCategory.parent.shopCategoryId",unless = "#result == null ")
     @Override
     public List<ShopCategory> findShopCategoryWithParentId(ShopCategory shopCategory) {
         return shopCategoryMapper.queryForListShopCategory(shopCategory);
     }
 
-    @Cacheable(cacheNames = "shopCategory",key = "'shopCategory'+#shopCategoryId")
+    @Cacheable(cacheNames = "allShopCategory",key = "'shopCategory'",unless = "#result == 0")
+    @Override
+    public List<ShopCategory> findAllShopCategory(ShopCategory shopCategory){
+        return shopCategoryMapper.queryForListShopCategory(shopCategory);
+    }
+
+    @Cacheable(cacheNames = "shopCategory",key = "'shopCategory'+#shopCategoryId",unless = "#result == null ")
     @Override
     public ShopCategory findShopCategoryById(Integer shopCategoryId) {
         return shopCategoryMapper.queryShopCategory(shopCategoryId);
     }
 
+    @Caching(
+            evict = {
+                    @CacheEvict(cacheNames = "shopCategoryList",allEntries = true),
+                    @CacheEvict(cacheNames = "allShopCategory",allEntries = true)
+            }
+    )
     @Override
     public int addShopCategory(ShopCategory shopCategory) {
         if (shopCategory!=null){
@@ -52,7 +64,9 @@ public class ShopCategoryServiceImpl implements ShopCategoryService {
             evict = {
                     //是店铺类别更新，  清空店铺列表缓存及店铺类别类别缓存
                     @CacheEvict(cacheNames = "shopCategoryList",key = "'parentId'+#shopCategory.parent.shopCategoryId"),
-                    @CacheEvict(cacheNames = "shopList",allEntries = true)
+                    @CacheEvict(cacheNames = "shopList",allEntries = true),
+                    @CacheEvict(cacheNames = "shopListWithCategoryId",key = "'shopCategoryId'+#shopCategory.shopCategoryId"),
+                    @CacheEvict(cacheNames = "allShopCategory",allEntries = true)
             }
     )
     @Override
@@ -69,7 +83,14 @@ public class ShopCategoryServiceImpl implements ShopCategoryService {
         return 0;
     }
 
-    @CacheEvict(cacheNames = "shopCategory",key = "'shopCategory'+#shopCategoryId")
+    @Caching(
+            evict = {
+                    @CacheEvict(cacheNames = "shopCategory",key = "'shopCategory'+#shopCategoryId"),
+                    @CacheEvict(cacheNames = "shopListWithCategoryId",key = "'shopCategoryId'+#shopCategoryId"),
+                    @CacheEvict(cacheNames = "shopList",allEntries = true),
+                    @CacheEvict(cacheNames = "allShopCategory",allEntries = true)
+            }
+    )
     @Override
     public int deleteShopCategoryById(Integer shopCategoryId) {
         return 0;

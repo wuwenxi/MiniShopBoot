@@ -136,6 +136,7 @@ $(function () {
     }
 
     $(document).on("click",".edit",function () {
+        $("#category_id").empty();
         $("#category_id").append($(this).attr("productCategoryId"));
         $("#category_name").val($(this).attr("productCategoryName"));
         $("#category_update_modal").modal({

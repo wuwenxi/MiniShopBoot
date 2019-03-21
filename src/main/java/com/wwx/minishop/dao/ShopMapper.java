@@ -1,6 +1,7 @@
 package com.wwx.minishop.dao;
 
 import com.wwx.minishop.entity.Shop;
+import com.wwx.minishop.entity.ShopCategory;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -16,4 +17,6 @@ public interface ShopMapper {
     int insertShop(Shop shop);
 
     Shop queryShopById(Integer shopId);
+
+    List<Shop> queryShopsByShopCategoryId(@Param("shopCategory") ShopCategory shopCategory);
 }

@@ -16,4 +16,5 @@ public interface ShopCategoryService {
 
     int deleteShopCategoryById(Integer shopCategoryId);
 
+    List<ShopCategory> findAllShopCategory(ShopCategory shopCategory);
 }

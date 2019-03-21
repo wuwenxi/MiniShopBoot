@@ -178,4 +178,17 @@ h4{
 	color: #686868;
 }
 
+.breadcrumb{
+	/*border-top: 1px solid #e2e2e2;*/
+	padding: 8px 130px;
+	margin-bottom: 20px;
+	list-style: none;
+	background: #ffffff;
+	border-radius: 4px;
+}
+
+.breadcrumb li h4{
+	font-size: 16px;
+}
+
 

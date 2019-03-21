@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -29,7 +30,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .defaultSuccessUrl("/shopAdmin")//跳转指定页面
                 .and()
                 .authorizeRequests()
-                .antMatchers("/shopManagerLogin","/userLogin").permitAll()
+                .antMatchers("/","/frontend/**","/shopManagerLogin","/userLogin").permitAll()
                 /*.antMatchers("/shopAdmin","/shopAdmin/**",
                         "/shop/**","/product/**","/personInfo/**").hasAuthority("shopAdmin")*/
                 .anyRequest().authenticated();
@@ -50,6 +51,17 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .userDetailsService(localAuthDetailService);
 
         http.csrf().disable();
+    }
+
+    /**
+     *
+     *           过滤静态文件
+     * @param web
+     * @throws Exception
+     */
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/static/**");
     }
 
     @Autowired

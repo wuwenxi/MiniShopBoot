@@ -14,7 +14,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
     @Autowired
     PersonInfoRepository personInfoRepository;
 
-    @Cacheable(cacheNames = "personInfo",key = "'personInfo'+#userId")
+    @Cacheable(cacheNames = "personInfo",key = "'personInfo'+#userId",unless = "#result == null")
     @Override
     public PersonInfo findPersonById(Integer userId) {
         if (userId!=null && userId>0){

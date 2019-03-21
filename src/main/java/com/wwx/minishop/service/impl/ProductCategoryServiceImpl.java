@@ -24,7 +24,7 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     @Autowired
     ProductCategoryMapper productCategoryMapper;
 
-    @Cacheable(cacheNames = "productCategoryList",key = "'productCategory'+#shopId")
+    @Cacheable(cacheNames = "productCategoryList",key = "'productCategory'+#shopId",unless = "#result == null ")
     @Override
     public List<ProductCategory> getCategoryList(Integer shopId) {
         return  productCategoryMapper.queryProductCategoriesByShopId(shopId);
@@ -53,7 +53,10 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
                             key = "'productCategory'+#productCategory.productCategoryId")},
             evict = {
                     //allEntries 清空productCategoryList中shopId下的缓存
-                    @CacheEvict(cacheNames = "productCategoryList",key = "'productCategory'+#productCategory.shop.shopId")}
+                    @CacheEvict(cacheNames = "productCategoryList",key = "'productCategory'+#productCategory.shop.shopId"),
+                    @CacheEvict(cacheNames = "productList",allEntries = true),
+                    @CacheEvict(cacheNames = "product",allEntries = true)
+            }
     )
     @Override
     public int modifyProductCategory(ProductCategory productCategory) {

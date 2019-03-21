@@ -16,7 +16,7 @@ public class ApplicationConfigure implements WebMvcConfigurer {
             /*配置视图*/
             @Override
             public void addViewControllers(ViewControllerRegistry registry) {
-                registry.addViewController("/").setViewName("/minishop");
+                registry.addViewController("/").setViewName("frontend/minishop");
             }
         };
     }

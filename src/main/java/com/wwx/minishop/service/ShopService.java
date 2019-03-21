@@ -16,4 +16,6 @@ public interface ShopService {
     Shop getShopById(Integer shopId);
 
     ShopExecution addShop(Shop shop, ImageHolder imageHolder);
+
+    List<Shop> findShopListWithShopCategory(Integer shopCategoryId);
 }
