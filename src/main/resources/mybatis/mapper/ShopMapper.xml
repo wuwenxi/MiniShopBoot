@@ -55,7 +55,8 @@
                 and s.shop_name like '%${shop.shopName}%'
             </if>
         </where>
-        order by priority desc
+        /* 按照店铺状态排序*/
+        order by s.enable_status desc
         limit #{rowIndex},#{pageSize}
     </select>
 
@@ -76,7 +77,10 @@
         from tb_shop s
         left join tb_shop_category sc on s.shop_category_id = sc.shop_category_id
         where
-        s.shop_category_id = #{shopCategory.shopCategoryId}
+        /* 筛选状态已审核过的店铺  并且按照状态排序*/
+        s.shop_category_id = #{shopCategory.shopCategoryId} and s.enable_status > 0
+        order by
+        s.enable_status desc
     </select>
 
     <insert id="insertShop" useGeneratedKeys="true" keyColumn="shop_id" keyProperty="shopId">

@@ -50,7 +50,7 @@ $(function () {
                 .append("删除").attr("productCategoryId",item.productCategoryId);
             var btn = $("<td></td>").append(edit).append("  ").append(del);
 
-            var categoryId = $("<td></td>").append(item.productCategoryId);
+            var categoryId = $("<td></td>").append(index+1);
             var categoryName = $("<td></td>").append(item.productCategoryName);
             var createTime = $("<td></td>").append(fmtDate(item.createTime));
             var shopName = $("<td></td>").append(item.shop.shopName);

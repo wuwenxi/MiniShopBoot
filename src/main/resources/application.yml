@@ -1,6 +1,6 @@
 spring:
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    driver-class-name: com.mysql.jdbc.Driver
     username: root
     password: root
     url: jdbc:mysql:///minishop?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
@@ -51,7 +51,12 @@ spring:
     type: redis
     redis:
       time-to-live: 3600s     #缓存时效1小时
-      cache-null-values: false  #不缓存空值
+      cache-null-values: false #不缓存空值
+
+  #data:
+    #elasticsearch:
+      #cluster-name:  elasticsearch
+      #cluster-nodes: 192.168.1.247:9300
   #整合rabbitmq
   #rabbitmq:
    # host: 192.168.1.247

@@ -191,4 +191,12 @@ h4{
 	font-size: 16px;
 }
 
+.shop-list a{
+	color: #000000;
+}
+
+.shop-list a:hover{
+	text-decoration: none;
+}
+
 

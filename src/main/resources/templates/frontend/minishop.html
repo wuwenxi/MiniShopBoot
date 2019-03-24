@@ -95,64 +95,13 @@
         <span><img th:src="@{/image/kongbaitiao.png}" style="margin-top: 25px;"/></span>
     </div>
 
-    <!--标签-->
-    <div class="container">
-        <div class="row">
-            <h2 class="service">更多服务</h2>
-            <nav class="navbar navbar-default navbar-background" role="navigation">
-                <div class="container-fluid">
-                    <div>
-                        <ul class="nav navbar-nav footBottomTab">
-                            <li><a href="#">关于MiniShop</a></li>
-                            <li><a href="#">了解更多</a></li>
-                            <li><a href="#">加入我们</a></li>
-                            <li><a href="#">成为店家</a></li>
-                            <li><a href="#">帮助中心</a></li>
-                            <li><a href="#">反馈</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-        </div>
-    </div>
+    <div th:replace="frontend/bar::service"></div>
+
     <div>
-                    <span>
-                    <img th:src="@{/image/kongbaitiao.png}"
-                         style="margin-top: 25px;"/>
-                    </span>
+        <span><img th:src="@{/image/kongbaitiao.png}" style="margin-top: 25px;"/></span>
     </div>
-    <div class="footArea">
-        <!--<a href="#" class="bind_hover_card" data-toggle="popover" data-placement="top" data-trigger="hover">
-            弹出框</a>-->
-        <div class="container">
-            <div class="row title">
-                <div class="col-lg-6 col-md-6 col-sm-6">
-                    <h3>分享网站</h3>
-                    <p style="size: 15px">分享我们的网站，让更多人了解我们，加入到我们，感谢您的参与.</p>
-                    <div class="share">
-                        <a href="#">Facebook</a>
-                        <a href="#">Twitter</a>
-                        <a href="#">朋友圈</a>
-                        <a href="#">微博</a>
-                        <a href="#">QQ好友</a>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-6 col-sm-6">
-                    <h3>关于网站</h3>
-                    <p>作者：
-                        吴文锡
-                    </p>
-                    <span>电话：028-28001023</span>
-                    <span>地址：四川省成都市成华区二仙桥东三路</span>
-                    <p>网站开源地址：
-                        <a style="color: black" href="https://github.com/wuwenxi/MiniShopBoot.git" target="_blank">
-                            https://github.com/wuwenxi/MiniShopBoot.git
-                        </a>
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
+
+    <div th:replace="frontend/bar::footArea"></div>
 
     <script type="text/javascript" th:src="@{/js/jquery/jquery-1.11.3.min.js}"></script>
     <script type="text/javascript" th:src="@{/assets/js/bootstrap.min.js}"></script>

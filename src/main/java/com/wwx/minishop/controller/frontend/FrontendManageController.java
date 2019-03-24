@@ -46,4 +46,10 @@ public class FrontendManageController {
     @GetMapping("/other")
     public String other(){ return "frontend/other"; }
 
+    @GetMapping("/shopDetail")
+    public String shopDetail(){ return "frontend/shopDetail"; }
+
+    @GetMapping("/productDetail")
+    public String productDetail(){ return "frontend/productDetail"; }
+
 }

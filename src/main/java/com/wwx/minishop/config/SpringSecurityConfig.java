@@ -30,6 +30,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .defaultSuccessUrl("/shopAdmin")//跳转指定页面
                 .and()
                 .authorizeRequests()
+                //过滤静态文件
+                .antMatchers("/assets/**","/css/**","/image/**","/js/**","/upload/**").permitAll()
                 .antMatchers("/","/frontend/**","/shopManagerLogin","/userLogin").permitAll()
                 /*.antMatchers("/shopAdmin","/shopAdmin/**",
                         "/shop/**","/product/**","/personInfo/**").hasAuthority("shopAdmin")*/

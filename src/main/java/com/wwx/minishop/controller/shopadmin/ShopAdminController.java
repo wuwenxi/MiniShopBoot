@@ -65,4 +65,7 @@ public class ShopAdminController {
         return prefix + "modifyProduct";
     }
 
+    @GetMapping("/modifyShop")
+    public String modifyShop(){return prefix + "modifyShop";}
+
 }

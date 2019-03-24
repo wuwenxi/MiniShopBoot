@@ -20,6 +20,7 @@
         <association property="shop" javaType="com.wwx.minishop.entity.Shop">
             <id property="shopId" column="shop_id"/>
             <result property="shopName" column="shop_name"/>
+            <result property="enableStatus" column="enable_status"/>
         </association>
     </resultMap>
 
@@ -28,13 +29,13 @@
         p.normal_price,p.promotion_price,p.priority,p.create_time,p.last_edit_time,
         p.enable_status,p.product_category_id,p.shop_id,
         pc.product_category_id,pc.product_category_name,
-        s.shop_id,s.shop_name
+        s.shop_id,s.shop_name,s.enable_status
         from
         tb_product p
         left join tb_product_category pc on p.product_category_id = pc.product_category_id
         left join tb_shop s on p.shop_id = s.shop_id
         where
-        s.shop_id = #{shopId}
+        s.shop_id = #{shopId} and s.enable_status > 0
     </select>
 
     <select id="queryProductById" resultMap="ProductType">

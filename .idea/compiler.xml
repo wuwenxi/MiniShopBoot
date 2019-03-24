@@ -10,6 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="demo" target="1.8" />
       <module name="MiniShop" target="1.8" />
     </bytecodeTargetLevel>
   </component>

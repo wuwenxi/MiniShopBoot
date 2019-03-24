@@ -15,6 +15,7 @@ import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
+import java.time.Duration;
 
 
 @Configuration
@@ -39,6 +40,8 @@ public class RedisConfig extends CachingConfigurerSupport {
                 /*.entryTtl(timeToLive)*/
                 .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(redisSerializer))
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(jackson2JsonRedisSerializer))
+                //设置缓存失效时间
+                .entryTtl(Duration.ofHours(1))
                 .disableCachingNullValues();
 
         return RedisCacheManager.builder(connectionFactory)

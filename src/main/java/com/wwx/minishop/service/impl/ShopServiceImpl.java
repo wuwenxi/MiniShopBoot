@@ -4,13 +4,9 @@ import com.wwx.minishop.beans.ImageHolder;
 import com.wwx.minishop.dao.ShopMapper;
 import com.wwx.minishop.entity.Shop;
 import com.wwx.minishop.entity.ShopCategory;
-import com.wwx.minishop.enums.ShopStateEnum;
 import com.wwx.minishop.exception.ShopException;
-import com.wwx.minishop.execution.ShopExecution;
-import com.wwx.minishop.repository.ShopRepository;
 import com.wwx.minishop.service.ShopService;
 import com.wwx.minishop.utils.ImageUtils;
-import com.wwx.minishop.utils.PathUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.*;
 import org.springframework.stereotype.Service;
@@ -18,7 +14,6 @@ import org.springframework.stereotype.Service;
 import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import static com.wwx.minishop.utils.InsertImageUtils.addShopImg;
 
@@ -42,16 +37,15 @@ public class ShopServiceImpl implements ShopService {
     }
 
     @Caching(
-            put = {
-                    @CachePut(cacheNames = "shop",key = "'shop'+#shop.shopId")},
             evict = {
                     //数据更新 清空shopList的缓存
+                    @CacheEvict(cacheNames = "shop",key = "'shop'+#shop.shopId" ),
                     @CacheEvict(cacheNames = "shopList",key = "'own'+#shop.owner.userId"),
                     @CacheEvict(cacheNames = "shopListWithCategoryId",allEntries = true)
             }
     )
     @Override
-    public ShopExecution modifyShop(Shop shop, ImageHolder image) throws ShopException{
+    public int modifyShop(Shop shop, ImageHolder image) throws ShopException{
         //获取文件输入流  以及文件名
         InputStream in = null;
         String fileName = null;
@@ -62,7 +56,7 @@ public class ShopServiceImpl implements ShopService {
         }
 
         if(shop == null || shop.getShopId() == null){
-            return new ShopExecution(ShopStateEnum.NULL_SHOP);
+            return -1;
         }else {
             //  1.  判断是否需要更新图片
             try {
@@ -81,12 +75,12 @@ public class ShopServiceImpl implements ShopService {
                 try {
                     shopMapper.updateShop(shop);
                 } catch (Exception e) {
-                    return new ShopExecution(ShopStateEnum.INNER_ERROR);
+                    return -1;
                 }
                 shop = shopMapper.queryShopById(shop.getShopId());
-                return new ShopExecution(ShopStateEnum.SUCCESS,shop);
+                return 1;
             } catch (Exception e) {
-                return new ShopExecution(ShopStateEnum.INNER_ERROR);
+                return -1;
             }
         }
     }
@@ -109,18 +103,18 @@ public class ShopServiceImpl implements ShopService {
             }
     )
     @Override
-    public ShopExecution addShop(Shop shop, ImageHolder image) {
+    public int addShop(Shop shop, ImageHolder image) {
         if(shop == null){
             //店铺信息为空
-            return new ShopExecution(ShopStateEnum.NULL_SHOP);
+            return -1;
         }
         if(shop.getShopAddress() == null ){
             //地区为空
-            return new ShopExecution(ShopStateEnum.NULL_AREA_ID);
+            return -1;
         }
         if (shop.getShopCategory()==null){
             //店铺类别为空
-            return new ShopExecution(ShopStateEnum.NULL_SHOP_CATEGORY_ID);
+            return -1;
         }
 
         /**
@@ -155,7 +149,7 @@ public class ShopServiceImpl implements ShopService {
                         throw new ShopException("更新图片地址失败");
                     }else {
                         //店铺创建成功
-                        return new ShopExecution(ShopStateEnum.CHECK,shop);
+                        return 1;
                     }
                 }else {
                     throw new ShopException("店铺图片未知");
@@ -167,11 +161,9 @@ public class ShopServiceImpl implements ShopService {
 
     }
 
-    @Cacheable(cacheNames = "shopListWithCategoryId",key = "'shopCategoryId'+#shopCategoryId",unless = "#result == null ")
+    @Cacheable(cacheNames = "shopListWithCategoryId",key = "'shopCategoryId'+#shopCategory.shopCategoryId",unless = "#result == null ")
     @Override
-    public List<Shop> findShopListWithShopCategory(Integer shopCategoryId) {
-        ShopCategory shopCategory = new ShopCategory();
-        shopCategory.setShopCategoryId(shopCategoryId);
+    public List<Shop> findShopListWithShopCategory(ShopCategory shopCategory) {
         List<Shop> shops = shopMapper.queryShopsByShopCategoryId(shopCategory);
         if(shops!=null&&shops.size()>0){
             return shops;

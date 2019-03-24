@@ -19,7 +19,7 @@ $(function () {
         $.getJSON("/product/getcategorylist/"+shopId,function (data) {
                 if (data.code===100){
                     $("#productCategory").empty();
-                    $("#productCategory").append("<option value='0'>—— 商品类别 ——</option>")
+                    $("#productCategory").append("<option value='0'>—— 商品类别 ——</option>");
                     $.each(data.extend.map.categoryList,function () {
                         var productCategory = $("<option></option>").append(this.productCategoryName)
                             .attr("value",this.productCategoryId);
@@ -29,18 +29,19 @@ $(function () {
                     $("#modal_hint").text(data.extend.map.msg);
                     $("#modal").modal({
                         backdrop:'static'
-                    })
+                    });
+                    $("#productCategory").append("<option value='0'>—— 商品类别 ——</option>");
                 }
             }
         )
     }
 
     $("#productFromShop").change(function () {
+        $("#productCategory").empty();
         var shopId = $("#productFromShop").val();
         if(shopId>0){
             getCategory(shopId);
         }else {
-            $("#productCategory").empty();
             var productCategory = "<option value='0'>—— 商品类别 ——</option>";
             $("#productCategory").append(productCategory);
         }

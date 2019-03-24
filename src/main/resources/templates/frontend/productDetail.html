@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>MiniShop</title>
+    <link rel="icon" type="image/ico" th:href="@{/image/favicon.ico}">
+
+    <link rel="stylesheet" href="http://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/css/minishop/minishop.css}"/>
+    <link rel="stylesheet" th:href="@{/css/minishop/shopdetail.css}">
+</head>
+<body>
+
+    <div th:replace="frontend/bar::head_top"></div>
+
+    <div class="container">
+        <div class="row" style="margin-top: 40px;margin-bottom: 20px">
+            <div class="col-md-4">
+                <div class="thumbnail shop-img">
+                </div>
+            </div>
+            <div class="col-md-4 product-detail" >
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+    <!--底部栏-->
+    <div>
+        <span><img th:src="@{/image/kongbaitiao.png}" style="margin-top: 25px;"/></span>
+    </div>
+
+    <div th:replace="frontend/bar::service"></div>
+
+    <div>
+        <span><img th:src="@{/image/kongbaitiao.png}" style="margin-top: 25px;"/></span>
+    </div>
+
+    <div th:replace="frontend/bar::footArea"></div>
+
+    <script th:src="@{/js/jquery/jquery-1.11.3.min.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/commons/common.js}"></script>
+    <script th:src="@{/js/minishop/product_detail.js}"></script>
+
+    <script>
+        //启动轮播，设置轮播间隔4s
+        $(".carousel").carousel({
+            interval: 4000
+        });
+    </script>
+</body>
+</html>

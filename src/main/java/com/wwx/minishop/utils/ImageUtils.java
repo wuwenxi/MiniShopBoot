@@ -44,7 +44,9 @@ public class ImageUtils {
         File dest = new File(PathUtils.getImgBasePath() + relativePath);
         try {
             Thumbnails.of(image.getInputStream())
-                    .size(200,200)
+                    .size(250,170)
+                    //取消按照比例缩放，全部图片按照
+                    .keepAspectRatio(false)
                     //压缩成百分之八十
                     .outputQuality(0.8f)
                     //输出新文件
@@ -79,6 +81,8 @@ public class ImageUtils {
         try {
             Thumbnails.of(image.getInputStream())
                     .size(337,640)
+                    //取消按照比例缩放，全部图片按照
+                    .keepAspectRatio(false)
                     //压缩成百分之八十
                     .outputQuality(0.8f)
                     //输出新文件
@@ -112,6 +116,8 @@ public class ImageUtils {
         try {
             Thumbnails.of(image.getInputStream())
                     .size(50,50)
+                    //取消按照比例缩放，全部图片按照
+                    .keepAspectRatio(false)
                     //压缩成百分之八十
                     .outputQuality(0.8f)
                     //输出新文件
@@ -144,6 +150,8 @@ public class ImageUtils {
         try {
             Thumbnails.of(image.getInputStream())
                     .size(40,40)
+                    //取消按照比例缩放，全部图片按照
+                    .keepAspectRatio(false)
                     //压缩成百分之八十
                     .outputQuality(0.8f)
                     //输出新文件
@@ -178,6 +186,8 @@ public class ImageUtils {
         try {
             Thumbnails.of(image.getInputStream())
                     .size(337,200)
+                    //取消按照比例缩放，全部图片按照
+                    .keepAspectRatio(false)
                     //压缩成百分之八十
                     .outputQuality(0.8f)
                     //输出新文件

@@ -59,10 +59,9 @@ public class ShopCategoryServiceImpl implements ShopCategoryService {
     }
 
     @Caching(
-            put = {
-                    @CachePut(cacheNames = "shopCategory",key = "'shopCategory'+#shopCategory.shopCategoryId")},
             evict = {
                     //是店铺类别更新，  清空店铺列表缓存及店铺类别类别缓存
+                    @CacheEvict(cacheNames = "shopCategory",key = "'shopCategory'+#shopCategory.shopCategoryId"),
                     @CacheEvict(cacheNames = "shopCategoryList",key = "'parentId'+#shopCategory.parent.shopCategoryId"),
                     @CacheEvict(cacheNames = "shopList",allEntries = true),
                     @CacheEvict(cacheNames = "shopListWithCategoryId",key = "'shopCategoryId'+#shopCategory.shopCategoryId"),

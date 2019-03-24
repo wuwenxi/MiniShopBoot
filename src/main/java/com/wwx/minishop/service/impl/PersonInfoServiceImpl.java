@@ -31,9 +31,8 @@ public class PersonInfoServiceImpl implements PersonInfoService {
     }
 
     @Caching(
-            put = {
-                    @CachePut(cacheNames = "personInfo",key = "'personInfo'+#personInfo.userId")},
             evict = {
+                    @CacheEvict(cacheNames = "personInfo",key = "'personInfo'+#personInfo.userId"),
                     @CacheEvict(cacheNames = "shopList",key = "'own'+#personInfo.userId")
             }
     )

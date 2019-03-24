@@ -48,11 +48,10 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     }
 
     @Caching(
-            put = {
-                    @CachePut(cacheNames = "productCategory",
-                            key = "'productCategory'+#productCategory.productCategoryId")},
             evict = {
                     //allEntries 清空productCategoryList中shopId下的缓存
+                    @CacheEvict(cacheNames = "productCategory",
+                            key = "'productCategory'+#productCategory.productCategoryId"),
                     @CacheEvict(cacheNames = "productCategoryList",key = "'productCategory'+#productCategory.shop.shopId"),
                     @CacheEvict(cacheNames = "productList",allEntries = true),
                     @CacheEvict(cacheNames = "product",allEntries = true)

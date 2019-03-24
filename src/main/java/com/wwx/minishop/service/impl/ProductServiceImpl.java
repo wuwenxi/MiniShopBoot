@@ -81,10 +81,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Caching(
-            put = {
-                    @CachePut(cacheNames = "product",key = "'product'+#product.productId")},
             evict = {
                     //清空更新商品所属店铺下的商品列表
+                    @CacheEvict(cacheNames = "product",key = "'product'+#product.productId"),
                     @CacheEvict(cacheNames = "productList",key = "'shopId'+#product.shop.shopId")
             }
     )

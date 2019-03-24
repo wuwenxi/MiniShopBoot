@@ -59,7 +59,7 @@ $(function () {
                 .append("更新").attr("productId",item.productId);
             var btn = $("<td></td>").append(status).append("   ").append(preview).append("  ").append(edit);
 
-            var productId = $("<td></td>").append(item.productId);
+            var productId = $("<td></td>").append(index+1);
             var productName = $("<td></td>").append(item.productName);
             var productDesc = $("<td></td>").append(item.productDesc);
             var shopName = $("<td></td>").append(item.shop.shopName);

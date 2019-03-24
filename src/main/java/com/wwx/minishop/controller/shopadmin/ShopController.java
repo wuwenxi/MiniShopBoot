@@ -5,8 +5,6 @@ import com.wwx.minishop.beans.ImageHolder;
 import com.wwx.minishop.beans.Msg;
 import com.wwx.minishop.entity.PersonInfo;
 import com.wwx.minishop.entity.Shop;
-import com.wwx.minishop.enums.ShopStateEnum;
-import com.wwx.minishop.execution.ShopExecution;
 import com.wwx.minishop.service.ShopService;
 import com.wwx.minishop.utils.HttpServletRequestUtils;
 import com.wwx.minishop.utils.PersonInfoUtils;
@@ -20,7 +18,6 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,14 +30,12 @@ public class ShopController {
     @Autowired
     ShopService shopService;
 
-    private ShopExecution execution = new ShopExecution();
-
     private Map<String,Object> map = new HashMap<>();
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    @PutMapping("/modifyshop")
-    public Msg ModifyShop(HttpServletRequest request) throws IOException {
+    @PostMapping("/modifyshop")
+    public Msg ModifyShop(HttpServletRequest request){
         String shopStr = HttpServletRequestUtils.getString(request,"shop");
         Shop shop;
         try {
@@ -51,24 +46,37 @@ public class ShopController {
 
         //解析图片
         MultipartFile shopImage = null;
-        MultipartResolver resolver = new CommonsMultipartResolver(request.getSession().getServletContext());
-        if(resolver.isMultipart(request)){
-            MultipartHttpServletRequest servletRequest = (MultipartHttpServletRequest) request;
-            shopImage = servletRequest.getFile("shopImg");
+        CommonsMultipartResolver resolver =
+                new CommonsMultipartResolver(request.getSession().getServletContext());
+        try {
+            /*MultipartHttpServletRequest multipartRequest = resolver.resolveMultipart(request);
+            shopImage = multipartRequest.getFile("shopImg");*/
+            //判断是否有文件上传
+            if(resolver.isMultipart(request)){
+                MultipartHttpServletRequest servletRequest = (MultipartHttpServletRequest) request;
+                shopImage = servletRequest.getFile("shopImg");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         PersonInfo person = PersonInfoUtils.getPersonInfo(request);
         shop.setOwner(person);
 
-        if(shopImage!=null){
-            if(!ValidateUtil.checkShopImage(shopImage.getOriginalFilename())){
-                return Msg.fail().add("msg","文件格式错误！请传入图片");
-            }
-            execution = shopService.modifyShop(shop, new ImageHolder(shopImage.getOriginalFilename(),shopImage.getInputStream()));
-        }else
-            execution = shopService.modifyShop(shop,null);
+        int num = -1;
+        try {
+            if(shopImage!=null){
+                if(!ValidateUtil.checkShopImage(shopImage.getOriginalFilename())){
+                    return Msg.fail().add("msg","文件格式错误！请传入图片");
+                }
+                 num = shopService.modifyShop(shop, new ImageHolder(shopImage.getOriginalFilename(),shopImage.getInputStream()));
+            }else
+                 num = shopService.modifyShop(shop,null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        if (execution.getState().equals(ShopStateEnum.SUCCESS.getState())){
+        if (num == 1){
             return Msg.success().add("msg","更新成功");
         }else {
             return Msg.fail().add("msg","更新失败");
@@ -93,7 +101,7 @@ public class ShopController {
 
         //解析图片
         MultipartFile shopImage;
-        MultipartResolver resolver = new CommonsMultipartResolver(request.getSession().getServletContext());
+        CommonsMultipartResolver resolver = new CommonsMultipartResolver(request.getSession().getServletContext());
         if(resolver.isMultipart(request)){
             MultipartHttpServletRequest servletRequest = (MultipartHttpServletRequest) request;
             shopImage = servletRequest.getFile("shopImg");
@@ -109,13 +117,18 @@ public class ShopController {
             //前端页面不添加用户信息
             PersonInfo info = PersonInfoUtils.getPersonInfo(request);
             shop.setOwner(info);
+            //如果当前用户创建的店铺达到10个  则不能再继续创建店铺
+            List<Shop> shopList = shopService.findShopListWithOwner(shop);
+            if(shopList.size()==10){
+                return Msg.fail().add("msg","已到达创建店铺上限");
+            }
 
-            execution = shopService.addShop(shop,new ImageHolder(shopImage.getOriginalFilename(),shopImage.getInputStream()));
+            int num = shopService.addShop(shop,new ImageHolder(shopImage.getOriginalFilename(),shopImage.getInputStream()));
 
-            if (execution.getState().equals(ShopStateEnum.CHECK.getState())) {
-                return Msg.success().add("execution",execution);
+            if (num == 1) {
+                return Msg.success();
             } else {
-                return Msg.fail().add("msg", execution.getStateInfo());
+                return Msg.fail().add("msg", "添加失败");
             }
         } catch (Exception e) {
             return Msg.fail().add("msg:","服务器内部错误");

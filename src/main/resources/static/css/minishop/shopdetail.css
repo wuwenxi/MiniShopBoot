@@ -1,0 +1,13 @@
+
+.shop-detail{
+	margin-left: 20px;
+	/*margin-top: 10px;*/
+}
+
+.shop-detail li{
+	text-decoration: none;
+	list-style: none;
+	font-family: "Microsoft YaHei";
+	font-size: 16px;
+	margin-top: 10px;
+}

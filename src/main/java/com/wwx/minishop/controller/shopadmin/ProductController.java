@@ -6,16 +6,12 @@ import com.github.pagehelper.page.PageMethod;
 import com.wwx.minishop.beans.ImageHolder;
 import com.wwx.minishop.beans.Msg;
 import com.wwx.minishop.entity.*;
-import com.wwx.minishop.enums.ShopStateEnum;
 import com.wwx.minishop.exception.ProductException;
-import com.wwx.minishop.execution.ShopExecution;
 import com.wwx.minishop.service.ProductCategoryService;
-import com.wwx.minishop.service.ProductImgService;
 import com.wwx.minishop.service.ProductService;
 import com.wwx.minishop.service.ShopService;
 import com.wwx.minishop.utils.HttpServletRequestUtils;
 import com.wwx.minishop.utils.PersonInfoUtils;
-import com.wwx.minishop.utils.ValidateUtil;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -64,7 +60,7 @@ public class ProductController {
         return Msg.fail().add("map",map);
     }
 
-    @PutMapping("/modifyProduct")
+    @PostMapping("/modifyProduct")
     public Msg modifyProduct(HttpServletRequest request){
         String productStr = HttpServletRequestUtils.getString(request,"product");
         Product product = null;
@@ -84,7 +80,7 @@ public class ProductController {
         // 解析图片
         productImgList = new ArrayList<>();
 
-        MultipartResolver resolver = new CommonsMultipartResolver(request.getSession().getServletContext());
+        CommonsMultipartResolver resolver = new CommonsMultipartResolver(request.getSession().getServletContext());
 
         try {
             if (resolver.isMultipart(request)) {
@@ -178,7 +174,7 @@ public class ProductController {
         // 解析图片
         productImgList = new ArrayList<>();
 
-        MultipartResolver resolver = new CommonsMultipartResolver(request.getSession().getServletContext());
+        CommonsMultipartResolver resolver = new CommonsMultipartResolver(request.getSession().getServletContext());
 
         try {
             if (resolver.isMultipart(request)) {

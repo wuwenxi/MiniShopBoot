@@ -12,8 +12,6 @@ import com.wwx.minishop.service.ShopCategoryService;
 import com.wwx.minishop.service.ShopService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -36,9 +34,6 @@ public class MinishopApplicationTests {
 
     @Autowired
     ShopCategoryRepository shopCategoryRepository;
-
-    @Autowired
-    ShopRepository shopRepository;
 
     @Autowired
     ShopService shopService;
@@ -70,6 +65,13 @@ public class MinishopApplicationTests {
     @Autowired
     RabbitTemplate rabbitTemplate;
 
+
+    @Test
+    public void testES(){
+        Shop shop = shopService.getShopById(1);
+        System.out.println(shop);
+        //repository.index(shop);
+    }
 
 
     @Test
@@ -154,8 +156,15 @@ public class MinishopApplicationTests {
         parent.setShopCategoryId(1);
         category.setParent(parent);
         List<ShopCategory> allShopCategory = shopCategoryService.findShopCategoryWithParentId(category);
-        System.out.println(allShopCategory.size());
-        System.out.println(allShopCategory);
+        List<Shop> shops = new ArrayList<>();
+        for (ShopCategory shopCategory:allShopCategory){
+            List<Shop> list = shopService.findShopListWithShopCategory(shopCategory);
+            if(list!=null && list.size()>0){
+                shops.addAll(list);
+            }
+        }
+        System.out.println(shops.size());
+        System.out.println(shops);
         /*ShopCategory shopCategoryById = shopCategoryService.findShopCategoryById(14);
         System.out.println(shopCategoryById);*/
     }
