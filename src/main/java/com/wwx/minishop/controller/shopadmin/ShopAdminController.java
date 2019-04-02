@@ -20,6 +20,11 @@ public class ShopAdminController {
         return prefix + "ShopList";
     }
 
+    @GetMapping("/order")
+    public String Order(){
+        return prefix + "order";
+    }
+
     @GetMapping("/productlist")
     public String ProductList(){
         return prefix +"ProductList";

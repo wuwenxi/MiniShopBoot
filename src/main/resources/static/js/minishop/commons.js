@@ -30,6 +30,70 @@ $(function(){
 		})
 	}
 
+    initUserInfo();
+
+    function initUserInfo(){
+        var personInfo;
+        $.getJSON("/personInfo/initUserInfo",function (data) {
+            if(data.code === 100){
+                personInfo = data.extend.personInfo;
+                //初始化用户信息
+                if(personInfo !== null){
+                    $(".headerTopLeft").css("display","none");
+                    $(".personInfo").css("display","block");
+
+                    var userType;
+                    if(personInfo.userType===1){
+                        userType = "店家";
+                    }else {
+                        userType = "普通用户"
+                    }
+                    var html;
+                    if(personInfo.profileImg!==null){
+                        html = $("<img src='/image/"+personInfo.profileImg+"' class='img-circle img-thumbnail'>" +
+                            "<span>欢迎"+personInfo.userName+","+userType+"</span>")
+                    }else {
+                        if(personInfo.gender === "男"){
+                            html = $("<img src='/image/man.jpg' class='img-circle img-thumbnail'>" +
+                                "<span>欢迎"+personInfo.userName+","+userType+"</span>")
+                        }else {
+                            html = $("<img src='/image/woman.jpg' class='img-circle img-thumbnail'>" +
+                                "<span>欢迎"+personInfo.userName+","+userType+"</span>")
+                        }
+                    }
+                    $("#userImg").html(html);
+                }
+            }
+        });
+    }
+    $(".registerShop").click(function () {
+        /**
+         *    如果没有登录  跳转登录页面
+         *    如果登录了 用户类别不为店家  则跳转注册页面
+         */
+        $.getJSON("/personInfo/initUserInfo",function (data) {
+            if(data.code === 100){
+                var personInfo =data.extend.map.peresonInfo;
+                if(personInfo !== undefined) {
+                    if (personInfo.userType === 1) {
+                        $("#modal_hint").text("您已是店家，不可以申请了");
+                        $("#modal").modal({
+                            backdrop: 'static'
+                        });
+                        $("#message_dismiss").click(function () {
+                            window.location.href = "/";
+                        })
+                    }else {
+                        window.location.href = "/registerShop";
+                    }
+                }else {
+                    window.location.href = "/userLogin";
+                }
+            }
+        });
+
+    });
+
 	$("#search").click(function(){
 		alert("正在检索...")
 	});

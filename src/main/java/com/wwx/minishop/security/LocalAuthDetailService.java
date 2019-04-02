@@ -1,10 +1,8 @@
 package com.wwx.minishop.security;
 
 import com.wwx.minishop.entity.LocalAuth;
-import com.wwx.minishop.repository.LocalAuthRepository;
 import com.wwx.minishop.service.LocalAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,7 +12,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 
 @Component

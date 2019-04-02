@@ -38,4 +38,15 @@
         product_category_id = #{productCategoryId}
     </update>
 
+    <insert id="insertProductCategory" useGeneratedKeys="true">
+        insert into
+        tb_product_category(product_category_name,priority,create_time,shop_id)
+        values
+        (#{productCategoryName},#{priority},#{createTime},#{shop.shopId})
+    </insert>
+
+    <delete id="productCategoryId">
+        delete * from tb_product_category where product_category_id = #{productCategoryId}
+    </delete>
+
 </mapper>

@@ -11,4 +11,8 @@ public interface ProductCategoryMapper {
     List<ProductCategory> queryProductCategoriesByShopId(Integer shopId);
 
     int updateProductCategory(ProductCategory productCategory);
+
+    void insertProductCategory(ProductCategory productCategory);
+
+    int deleteByProductCategoryId(Integer productCategoryId);
 }

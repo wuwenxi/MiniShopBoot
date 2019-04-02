@@ -1,6 +1,7 @@
 package com.wwx.minishop.utils;
 
 import com.wwx.minishop.beans.ImageHolder;
+import com.wwx.minishop.entity.PersonInfo;
 import com.wwx.minishop.entity.Product;
 import com.wwx.minishop.entity.ProductImg;
 import com.wwx.minishop.entity.Shop;
@@ -46,6 +47,14 @@ public class InsertImageUtils {
         String realPath = ImageUtils.generateThumbnail(image,path);
         //将图片地址存入数据库
         shop.setShopImg(realPath);
+    }
+
+    public static void addPersonInfoImg(PersonInfo personInfo, ImageHolder imageHolder){
+        String path = PathUtils.getPersonImgPath(personInfo.getUserId());
+
+        String realPath = ImageUtils.generateHeaderImage(imageHolder,path);
+
+        personInfo.setProfileImg(realPath);
     }
 
     public static ImageHolder resolveImage(HttpServletRequest request, ImageHolder image, List<ImageHolder> productImgList) {

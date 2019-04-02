@@ -133,10 +133,17 @@
                 </a>
             </li>
 
-            <li th:class="${activeUri == 'shopList' ? 'active':''}">
+            <!--<li th:class="${activeUri == 'shopList' ? 'active':''}">
                 <a th:href="@{/shopAdmin/shoplist}">
                     <i class="icon-list"></i>
                     <span class="menu-text"> 店铺列表 </span>
+                </a>
+            </li>-->
+
+            <li th:class="${activeUri == 'order' ? 'active':''}">
+                <a th:href="@{/shopAdmin/order}">
+                    <i class="icon-list"></i>
+                    <span class="menu-text"> 订单列表 </span>
                 </a>
             </li>
 

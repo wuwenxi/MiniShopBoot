@@ -11,7 +11,7 @@
 /*顶部栏*/			
 .headerTop{
 	width: auto;
-	height: 31px;
+	height: 40px;
 	background-color: #f7f7f7;
 	border-bottom: 1px solid #ccc;
 			}
@@ -20,12 +20,49 @@
 	float: left;
 	margin-left:75%;	
 	color: #808080;
-	}
+}
+
+.personInfo{
+	margin-left:75%;
+}
+
+#userImg:hover{
+	text-decoration: none;
+}
+
+#logout .btn-default{
+	background-color: #ffffff!important;
+	border-color: #ffffff;
+}
+
+#logout .mybtn{
+	color: #333!important;
+}
+
+#logout .btn-xs{
+	font-size: 14px;
+	line-height: 1.5;
+}
+
+#logout .btn-xs:hover{
+	background-color: #ffffff!important;
+	border-color: #ffffff;
+}
+
+.personInfo img{
+	width: 40px;
+}
+
+.personInfo span{
+	font-family: "宋体";
+	font-size: 13px;
+	line-height: 40px;
+}
 			
 .headerTopLeft span{
 	font-family: "宋体";
 	font-size: 13px;
-	line-height: 30px;
+	line-height: 40px;
 	float: left;
 }
 

@@ -39,12 +39,17 @@ public class PersonInfo implements Serializable {
     @Column(name = "enable_status")
     private Integer enableStatus;
 
+    private String userName;
+
+    private String password;
+
+    private String phone;
+
     public PersonInfo() {
     }
 
-    public PersonInfo(Integer userId, String name, String gender, String email,
-                      String profileImg, Integer userType, Date createTime, Date lastEditTime, Integer enableStatus) {
-        this.userId = userId;
+    public PersonInfo(String name, String gender, String email, String profileImg, Integer userType, Date createTime, Date lastEditTime,
+                      Integer enableStatus, String userName, String password, String phone) {
         this.name = name;
         this.gender = gender;
         this.email = email;
@@ -53,6 +58,9 @@ public class PersonInfo implements Serializable {
         this.createTime = createTime;
         this.lastEditTime = lastEditTime;
         this.enableStatus = enableStatus;
+        this.userName = userName;
+        this.password = password;
+        this.phone = phone;
     }
 
     @Override
@@ -67,7 +75,34 @@ public class PersonInfo implements Serializable {
                 ", createTime=" + createTime +
                 ", lastEditTime=" + lastEditTime +
                 ", enableStatus=" + enableStatus +
+                ", userName='" + userName + '\'' +
+                ", password='" + password + '\'' +
+                ", phone='" + phone + '\'' +
                 '}';
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public Integer getUserId() {

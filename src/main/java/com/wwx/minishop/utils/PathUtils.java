@@ -28,6 +28,10 @@ public class PathUtils {
         return ImagePath;
     }
 
+    public static String getPersonImgPath(Integer personId){
+        return "/upload/item/personInfo"+personId+"/";
+    }
+
     //获取商品类别图片在数据库中的存储位置
     public static String getShopCategoryImagePath(){
         String ImagePath = "/upload/item/shopCategory/";

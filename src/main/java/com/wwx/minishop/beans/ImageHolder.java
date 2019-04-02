@@ -12,6 +12,9 @@ public class ImageHolder {
 
     private InputStream inputStream;
 
+    public ImageHolder() {
+    }
+
     public ImageHolder(String fileName, InputStream inputStream) {
         this.fileName = fileName;
         this.inputStream = inputStream;

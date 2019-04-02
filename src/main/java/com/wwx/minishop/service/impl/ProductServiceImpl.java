@@ -1,13 +1,12 @@
 package com.wwx.minishop.service.impl;
 
 import com.wwx.minishop.beans.ImageHolder;
+import com.wwx.minishop.dao.ProductImgMapper;
 import com.wwx.minishop.dao.ProductMapper;
 import com.wwx.minishop.entity.Product;
 import com.wwx.minishop.entity.ProductImg;
 import com.wwx.minishop.exception.ProductException;
 import com.wwx.minishop.exception.ProductImgException;
-import com.wwx.minishop.repository.ProductImgRepository;
-import com.wwx.minishop.repository.ProductRepository;
 import com.wwx.minishop.service.ProductService;
 import com.wwx.minishop.utils.ImageUtils;
 import com.wwx.minishop.utils.PathUtils;
@@ -27,13 +26,10 @@ import static com.wwx.minishop.utils.InsertImageUtils.insertProductImgList;
 public class ProductServiceImpl implements ProductService {
 
     @Autowired
-    ProductRepository productRepository;
-
-    @Autowired
     ProductMapper productMapper;
 
     @Autowired
-    ProductImgRepository productImgRepository;
+    ProductImgMapper productImgMapper;
 
     @Cacheable(cacheNames = "productList",key = "'shopId'+#shopId",unless = "#result==null")
     @Override
@@ -60,7 +56,8 @@ public class ProductServiceImpl implements ProductService {
             }
             //保存商品
             try {
-                productRepository.save(product);
+                productMapper.insertProduct(product);
+                //productRepository.save(product);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -104,7 +101,7 @@ public class ProductServiceImpl implements ProductService {
                 }
             }
             if (productImgList!=null&&productImgList.size()>0){
-                List<ProductImg> list = productImgRepository.queryProductImgsByProductId(product.getProductId());
+                List<ProductImg> list = productImgMapper.queryProductImgsByProductId(product.getProductId());
                 //遍历删除详情图片
                 if(list!=null && list.size()>0){
                     for(ProductImg productImg:list){
@@ -112,14 +109,14 @@ public class ProductServiceImpl implements ProductService {
                         ImageUtils.deleteFileOrPath(productImg.getImgAddress());
                     }
                     //删除数据库中的记录
-                    productImgRepository.deleteByProductId(product.getProductId());
+                    productImgMapper.deleteByProductId(product.getProductId());
                 }
                 try {
                     //插入更新详细图片
                     List<ProductImg> productImgs = insertProductImgList(product, productImgList);
                     if(productImgs.size()>0){
                         try {
-                            productImgRepository.saveAll(productImgs);
+                            productImgMapper.insertProductImgs(productImgs);
                         } catch (Exception e) {
                             throw new ProductImgException("添加商品详情图发生错误");
                         }

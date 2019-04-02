@@ -32,7 +32,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 //过滤静态文件
                 .antMatchers("/assets/**","/css/**","/image/**","/js/**","/upload/**").permitAll()
-                .antMatchers("/","/frontend/**","/shopManagerLogin","/userLogin").permitAll()
+                .antMatchers("/","/frontend/**","/shopManagerLogin","/userLogin","/register","/personInfo/**").permitAll()
                 /*.antMatchers("/shopAdmin","/shopAdmin/**",
                         "/shop/**","/product/**","/personInfo/**").hasAuthority("shopAdmin")*/
                 .anyRequest().authenticated();

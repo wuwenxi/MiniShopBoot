@@ -10,11 +10,5 @@ public interface ShopCategoryService {
 
     ShopCategory findShopCategoryById(Integer shopCategoryId);
 
-    int addShopCategory(ShopCategory shopCategory);
-
-    int updateShopCategory(ShopCategory shopCategory);
-
-    int deleteShopCategoryById(Integer shopCategoryId);
-
     List<ShopCategory> findAllShopCategory(ShopCategory shopCategory);
 }

@@ -1,6 +1,6 @@
 package com.wwx.minishop.entity;
 
-//import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -9,7 +9,7 @@ import java.util.Date;
 /**
  *    店铺
  * */
-//@Document(indexName = "minishop",type = "shop")
+@Document(indexName = "minishop",type = "shop")
 @Entity
 @Table(name = "tb_shop")
 public class Shop implements Serializable {

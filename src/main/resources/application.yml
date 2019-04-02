@@ -53,10 +53,10 @@ spring:
       time-to-live: 3600s     #缓存时效1小时
       cache-null-values: false #不缓存空值
 
-  #data:
-    #elasticsearch:
-      #cluster-name:  elasticsearch
-      #cluster-nodes: 192.168.1.247:9300
+  data:
+    elasticsearch:
+      cluster-name:  docker-cluster
+      cluster-nodes: 192.168.1.247:9300
   #整合rabbitmq
   #rabbitmq:
    # host: 192.168.1.247

@@ -13,4 +13,6 @@ public interface ProductMapper {
     int modifyProduct(Product product);
 
     Product queryProductById(Integer productId);
+
+    void insertProduct(Product product);
 }

@@ -6,7 +6,6 @@ import com.wwx.minishop.dao.ProductMapper;
 import com.wwx.minishop.dao.ShopCategoryMapper;
 import com.wwx.minishop.dao.ShopMapper;
 import com.wwx.minishop.entity.*;
-import com.wwx.minishop.repository.*;
 import com.wwx.minishop.service.ProductService;
 import com.wwx.minishop.service.ShopCategoryService;
 import com.wwx.minishop.service.ShopService;
@@ -29,11 +28,7 @@ import java.util.*;
 @SpringBootTest
 public class MinishopApplicationTests {
 
-    @Autowired
-    PersonInfoRepository personInfoRepository;
 
-    @Autowired
-    ShopCategoryRepository shopCategoryRepository;
 
     @Autowired
     ShopService shopService;
@@ -50,8 +45,6 @@ public class MinishopApplicationTests {
     @Autowired
     ProductMapper productMapper;
 
-    @Autowired
-    ProductRepository productRepository;
 
     @Autowired
     ProductCategoryMapper productCategoryMapper;
@@ -65,12 +58,15 @@ public class MinishopApplicationTests {
     @Autowired
     RabbitTemplate rabbitTemplate;
 
-
     @Test
     public void testES(){
-        Shop shop = shopService.getShopById(1);
+     /*   Shop shop = shopService.getShopById(1);
         System.out.println(shop);
-        //repository.index(shop);
+        Book book = new Book();
+        book.setId(1);
+        book.setName("西游记");
+        book.setAuthor("吴承恩");
+        shopDao.index(book);*/
     }
 
 
@@ -124,9 +120,6 @@ public class MinishopApplicationTests {
     /*@Qualifier("productCacheManager")//指定缓存管理器
     @Autowired
     RedisCacheManager productCacheManager;*/
-
-    @Autowired
-    LocalAuthRepository localAuthRepository;
 
     @Test
     public void testRedis(){
@@ -237,7 +230,6 @@ public class MinishopApplicationTests {
         shopCategoryArrayList.add(shopCategory6);
         shopCategoryArrayList.add(shopCategory7);
 
-        shopCategoryRepository.saveAll(shopCategoryArrayList);
     }
 
     @Test

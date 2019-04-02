@@ -18,7 +18,7 @@ public class MinishopApplication {
          *      由于在其他地方使用Netty，因此已经初始化并且Netty会对此进行防范，
          *      因此首次实例化会因看到的非法状态异常而失败
          */
-        //System.setProperty("es.set.netty.runtime.available.processors","false");
+        System.setProperty("es.set.netty.runtime.available.processors","false");
         SpringApplication.run(MinishopApplication.class, args);
     }
 

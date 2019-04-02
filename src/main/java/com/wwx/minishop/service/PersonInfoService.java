@@ -1,12 +1,11 @@
 package com.wwx.minishop.service;
 
+import com.wwx.minishop.beans.ImageHolder;
 import com.wwx.minishop.entity.PersonInfo;
 
 public interface PersonInfoService {
 
-    PersonInfo findPersonById(Integer userId);
+    PersonInfo findPersonInfoWithName(String username);
 
-    int modifyPersonInfo(PersonInfo personInfo);
-
-    int insertPersonInf(PersonInfo personInfo);
+    boolean addPersonInfo(PersonInfo personInfo, ImageHolder imageHolder);
 }
